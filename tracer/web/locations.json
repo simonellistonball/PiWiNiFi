@@ -1,0 +1,45 @@
+[{
+  "device": "pi333eef",
+  "floor": 1,
+  "location": { "x": 12, "y": 32 }
+}, {
+  "device": "rpid98733",
+  "floor": 2,
+  "location": { "x": 105, "y": 32 }
+}, {
+  "device": "rpifc2a2d",
+  "floor": 2,
+  "location": { "x": 105, "y": 50 }
+}, {
+  "device": "rpif038b1",
+  "floor": 2,
+  "location": { "x": 110, "y": 90 }
+}, {
+  "device": "rpi4d359f",
+  "floor": 4,
+  "location": { "x": 105, "y": 70 }
+}, {
+  "device": "rpi2e7c88",
+  "floor": 1,
+  "location": { "x": 150, "y": 95 }
+}, {
+  "device": "rpi93aea3",
+  "floor": 2,
+  "location": { "x": 150, "y": 45 }
+}, {
+  "device": "rpi5aedda",
+  "floor": 0,
+  "location": { "x": 52, "y": 40  }
+}, {
+  "device": "rpi351bc7",
+  "floor": 0,
+  "location": { "x": 140, "y": 60  }
+}, {
+  "device": "rpiee3450",
+  "floor": 1,
+  "location": { "x": 105, "y": 70  }
+}, {
+  "device": "rpi52a489",
+  "floor": 1,
+  "location": { "x": 105, "y": 50  }
+}]

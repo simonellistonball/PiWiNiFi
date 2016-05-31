@@ -1,0 +1,22 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^1.9.2",
+    "gulp": "^3.9.1",
+    "http-proxy-middleware": "^0.13.0",
+    "proxy-middleware": "^0.15.0",
+    "url": "^0.11.0"
+  },
+  "dependencies": {
+    "d3": "^3.4.13",
+    "gulp-connect-proxy": "^0.3.1"
+  }
+}
