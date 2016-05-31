@@ -22,8 +22,8 @@ docker run -i -t --rm \
     -v $(realpath ./repos/database_repository):"${NIFI_HOME}/database_repository" \
     -v $(realpath ./repos/content_repository):"${NIFI_HOME}/content_repository" \
     -v $(realpath ./repos/provenance_repository):"${NIFI_HOME}/provenance_repository" \
-    -e KEYSTORE_PASSWORD=$(getPass certs/passwd keystorePassword) \
-    -e TRUSTSTORE_PASSWORD=$(getPass certs/passwd truststorePassword)  \
+    -e KEYSTORE_PASSWORD=$(getPass certs/passwd keystorePasswd) \
+    -e TRUSTSTORE_PASSWORD=$(getPass certs/passwd truststorePasswd)  \
     -e NIFI_PORT=${NIFI_PORT} \
     -e REMOTE_PORT=${REMOTE_PORT} \
     -p ${NIFI_PORT}:${NIFI_PORT} \
