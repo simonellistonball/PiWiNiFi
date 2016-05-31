@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+      <dl>
+        <dt>ID:
+        <dd><input type="text" size="32" name="id">
+        <dt>MAC address:
+          <dd><input type="text" size="32" maxlength="32" name="mac">
+          <dd><input type="submit" value="Share"></dd>
+      </dl>
+    </form>
+  {% endif %}
+  <table class="entries">
+    <thead><tr><th>ID</th><th>MAC address</th></tr></thead>
+    <tbody>
+      {% for entry in entries %}
+        <tr><td>{{ entry.id }}</td><td>{{ entry.mac }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,122 @@
+{
+  "host_groups" : [
+    {
+      "name": "gateway",
+      "cardinality" : "1",
+      "components": [
+        { "name": "HDFS_CLIENT" },
+        { "name": "TEZ_CLIENT" },
+        { "name": "YARN_CLIENT" },
+        { "name": "ZOOKEEPER_CLIENT" },
+        { "name": "HIVE_CLIENT" },
+        { "name": "PIG" },
+        { "name": "SPARK_CLIENT" },
+        { "name": "HBASE_CLIENT" },
+        { "name": "PHOENIX_QUERY_SERVER" }
+      ]
+    },
+    {
+      "name": "nifi",
+      "components": [
+        { "name": "HDFS_CLIENT" },
+        { "name": "HBASE_CLIENT" }
+      ]
+    },
+    {
+      "name": "master_1",
+      "cardinality" : "1",
+      "components": [
+        { "name": "NAMENODE" },
+        { "name": "ZOOKEEPER_SERVER" },
+        { "name": "HISTORYSERVER" },
+        { "name": "APP_TIMELINE_SERVER" },
+        { "name": "SPARK_JOBHISTORYSERVER" },
+        { "name": "KAFKA_BROKER" },
+        { "name": "DATANODE" },
+        { "name": "NODEMANAGER" }
+      ]
+    },
+    {
+      "name": "master_2",
+      "cardinality" : "1",
+      "components": [
+        { "name": "SECONDARY_NAMENODE" },
+        { "name": "RESOURCEMANAGER" },
+        { "name": "HBASE_MASTER" },
+        { "name": "DATANODE" },
+        { "name": "NODEMANAGER" },
+        { "name": "HIVE_SERVER" },
+        { "name": "HIVE_METASTORE" },
+        { "name": "WEBHCAT_SERVER" },
+        { "name": "HCAT" }
+      ]
+    },
+    {
+      "name": "slaves",
+      "components": [
+        { "name": "DATANODE" },
+        { "name": "NODEMANAGER" },
+        { "name": "HBASE_REGIONSERVER" }
+      ]
+    }
+  ],
+  "configurations": [
+    {
+      "core-site": {
+        "properties" : {
+          "hadoop.proxyuser.root.hosts": "*",
+          "hadoop.proxyuser.root.groups": "*",
+          "hadoop.proxyuser.hcat.hosts": "*",
+          "hadoop.proxyuser.hcat.groups": "*",
+          "hadoop.proxyuser.hdfs.hosts": "*",
+          "hadoop.proxyuser.hdfs.groups": "*",
+          "hadoop.proxyuser.hive.hosts": "*",
+          "hadoop.proxyuser.hive.groups": "*",
+          "hadoop.proxyuser.ambari.hosts": "*",
+          "hadoop.proxyuser.ambari.groups": "*",
+          "proxyuser_group": "users"
+        }
+      }
+    },
+    {
+      "hive-site": {
+        "properties": {
+          "javax.jdo.option.ConnectionDriverName" : "org.postgresql.Driver",
+          "javax.jdo.option.ConnectionPassword" : "hive",
+          "javax.jdo.option.ConnectionURL" : "jdbc:postgresql://sball01.cloud.hortonworks.com:5432/hive",
+          "javax.jdo.option.ConnectionUserName" : "hive"
+        }
+      }
+    },
+    {
+      "hive-env": {
+        "properties": {
+          "hive_ambari_database" : "Postgres",
+          "hive_database" : "Existing PostgreSQL Database",
+          "hive_database_type" : "postgres"
+        }
+      }
+    },
+    {
+      "oozie-env": {
+        "properties": {
+          "oozie_ambari_database" : "Postgres",
+          "oozie_database" : "Existing PostgreSQL Database",
+          "oozie_database_type" : "postgres"
+        }
+      }
+    },
+    {
+      "ams-hbase-env": {
+        "properties": {
+          "hbase_master_heapsize": "768"
+        }
+      }
+    }
+  ],
+  "Blueprints" : {
+    "blueprint_name": "fullCluster",
+    "stack_name" : "HDP",
+    "stack_version" : "2.4"
+  }
+}

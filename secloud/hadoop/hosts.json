@@ -1,0 +1,48 @@
+{
+    "blueprint": "fullCluster",
+    "default_password": "admin",
+    "host_groups": [
+        {
+            "hosts": [
+                {
+                    "fqdn": "%STACK%01.cloud.hortonworks.com"
+                }
+            ],
+            "name": "gateway"
+        },
+        {
+            "hosts": [
+                {
+                    "fqdn": "%STACK%02.cloud.hortonworks.com"
+                }
+            ],
+            "name": "nifi"
+        },
+        {
+            "hosts": [
+                {
+                    "fqdn": "%STACK%03.cloud.hortonworks.com"
+                }
+            ],
+            "name": "master_1"
+        },
+        {
+            "hosts": [
+                {
+                    "fqdn": "%STACK%04.cloud.hortonworks.com"
+                }
+            ],
+            "name": "master_2"
+        },
+        {
+            "hosts": [
+                {
+                    "fqdn": "%STACK%05.cloud.hortonworks.com",
+                    "fqdn": "%STACK%06.cloud.hortonworks.com",
+                    "fqdn": "%STACK%07.cloud.hortonworks.com"
+                }
+            ],
+            "name": "slaves"
+        }
+    ]
+}

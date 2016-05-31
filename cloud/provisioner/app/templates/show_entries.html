@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+<div>
+  <form action="{{ url_for('add_entry') }}" method="post" class="add-entry">
+    <dl>
+      <dt>MAC address:
+        <dd><input type="text" size="32" maxlength="32" name="mac">
+        <dd><input type="submit" value="Share"></dd>
+    </dl>
+  </form>
+</div>
+<table class="entries">
+  <thead><tr><th>ID</th><th>MAC address</th></tr></thead>
+  <tbody>
+    {% for entry in entries %}
+      <tr><td>{{ entry.id }}</td><td>{{ entry.mac }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

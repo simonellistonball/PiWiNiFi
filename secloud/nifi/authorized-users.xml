@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<users>
+  <user dn="CN=sball, ou=PiWiNiFi Demo, o=Hortonworks, l=Santa Clara, st=California, c=US">
+    <role name="ROLE_DFM"/><role name="ROLE_ADMIN"/><role name="ROLE_PROVENANCE"/>
+  </user>
+  <user dn="CN=dchaffey, ou=PiWiNiFi Demo, o=Hortonworks, l=Santa Clara, st=California, c=US">
+    <role name="ROLE_DFM"/><role name="ROLE_ADMIN"/><role name="ROLE_PROVENANCE"/>
+  </user>
+</users>

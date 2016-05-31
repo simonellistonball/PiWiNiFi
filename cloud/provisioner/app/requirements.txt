@@ -1,0 +1,10 @@
+click==6.4
+dicttoxml==1.6.6
+Flask==0.10.1
+Flask-CLI==0.2.1
+Flask-Responses==0.2
+itsdangerous==0.24
+Jinja2==2.8
+MarkupSafe==0.23
+uWSGI==2.0.12
+Werkzeug==0.11.5
