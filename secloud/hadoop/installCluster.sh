@@ -1,24 +1,20 @@
 #!/bin/sh
 
-HOSTS=
+stack=$1
+count=7
+HOSTS="${stack}0[1-$count].cloud.hortonworks.com"
 
 ambari_server=$(cut -f 1 -d " " $HOSTS)
 address=http://${ambari_server}:8080/api/v1
 
-
 # bootstrap the servers
 bootstrap_url=https://raw.githubusercontent.com/seanorama/ambari-bootstrap/master/ambari-bootstrap.sh
 
-ssh ${ambari_server} yum install -y postgresql-jdbc
 ## link /hadoop to /mnt to use the data disk
-
 pdsh -w $HOSTS "ln -s /mnt /hadoop; exit;"
 
 ## install the ambari-server
 pdsh -w ${ambari_server} "curl -sSL ${bootstrap_url} | install_ambari_server=true sh; exit;"
-
-## configure ambari jdbc
-ssh ${ambari_server} ambari-server setup --jdbc-db=postgres --jdbc-driver=/usr/share/java/postgresql-jdbc.jar
 
 ssh ${ambari-server} 'curl https://bintray.com/sbt/rpm/rpm > /etc/yum.repos.d/bintray-sbt-rpm.repo;  yum install -y sbt'
 
@@ -30,10 +26,14 @@ for repo in HDP-2.4 HDP-UTILS-1.1.0.20; do
 done
 
 ## install to all other nodes. See ‘man pdsh’ for the various ways to specify hosts.
-pdsh -w "$HOSTS" curl -sSL ${bootstrap_url} | ambari_server=${ambari_server} sh; exit;"
+pdsh -w "$HOSTS" curl -sSL ${bootstrap_url} | ambari_server=${ambari_server} sh; exit;
 
 ## wait for ambari web interface to come up
 sleep 20
 
-curl -w "%{http_code}" -u admin:admin -H "X-Requested-By: simon" -d @blueprint.json -X POST $address/blueprints/demoCluster #&& \
-curl -u admin:admin -H "X-Requested-By: simon" -d @hosts.json -X POST $address/clusters/democluster
+cat ${blueprint}-hosts.json | sed "s/%STACK%/${stack}/" > /tmp/hosts.json
+
+curl -w "%{http_code}" -u admin:admin -H "X-Requested-By: simon" -d @${blueprint}.json -X POST $address/blueprints/${blueprint} #&& \
+curl -u admin:admin -H "X-Requested-By: simon" -d @/tmp/hosts.json -X POST $address/clusters/mycluster
+
+rm /tmp/hosts.json
