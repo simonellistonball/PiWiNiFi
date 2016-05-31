@@ -22,6 +22,10 @@ sed -i -e 's|nifi.web.https.port=.*$|nifi.web.https.port=${NIFI_PORT}|' ${nifi_p
 sed -i -e 's|nifi.remote.input.socket.port=.*$|nifi.remote.input.socket.port=${REMOTE_PORT}|' ${nifi_props_file}
 sed -i -e "s|nifi.remote.input.socket.host=.*$|nifi.remote.input.socket.host=${HOSTNAME}|" ${nifi_props_file}
 
+sed -i -e "s|nifi.security.needClientAuth=.*$|nifi.security.needClientAuth=true|" ${nifi_props_file}
+
+sed -i -e "s|nifi.ui.banner.text=.*$|nifi.ui.banner.text=${BANNER}|" ${nifi_props_file}
+
 if [ ! -f ${NIFI_HOME}/logs/nifi-app.log ]
 then
   mkdir -p ${NIFI_HOME}/logs/

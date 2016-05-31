@@ -26,6 +26,7 @@ docker run -i -t --rm \
     -e TRUSTSTORE_PASSWORD=$(getPass certs/passwd truststorePasswd)  \
     -e NIFI_PORT=${NIFI_PORT} \
     -e REMOTE_PORT=${REMOTE_PORT} \
+    -e BANNER="Cloud Nifi" \
     -p ${NIFI_PORT}:${NIFI_PORT} \
     -p ${REMOTE_PORT}:${REMOTE_PORT} \
     simonellistonball/nifi
