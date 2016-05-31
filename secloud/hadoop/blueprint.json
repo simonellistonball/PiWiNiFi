@@ -79,34 +79,6 @@
       }
     },
     {
-      "hive-site": {
-        "properties": {
-          "javax.jdo.option.ConnectionDriverName" : "org.postgresql.Driver",
-          "javax.jdo.option.ConnectionPassword" : "hive",
-          "javax.jdo.option.ConnectionURL" : "jdbc:postgresql://sball01.cloud.hortonworks.com:5432/hive",
-          "javax.jdo.option.ConnectionUserName" : "hive"
-        }
-      }
-    },
-    {
-      "hive-env": {
-        "properties": {
-          "hive_ambari_database" : "Postgres",
-          "hive_database" : "Existing PostgreSQL Database",
-          "hive_database_type" : "postgres"
-        }
-      }
-    },
-    {
-      "oozie-env": {
-        "properties": {
-          "oozie_ambari_database" : "Postgres",
-          "oozie_database" : "Existing PostgreSQL Database",
-          "oozie_database_type" : "postgres"
-        }
-      }
-    },
-    {
       "ams-hbase-env": {
         "properties": {
           "hbase_master_heapsize": "768"
