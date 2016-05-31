@@ -10,9 +10,12 @@ getPass() {
 
 NIFI_HOME=/opt/nifi
 
+REMOTE_PORT=8448
+NIFI_PORT=8447
+
 docker run -i -t --rm \
-    -P \
     -v $(realpath ./authorized-users.xml):"${NIFI_HOME}/conf/authorized-users.xml" \
+    -v $(realpath ./bootstrap.conf):"${NIFI_HOME}/conf/bootstrap.conf" \
     -v $(realpath ./flow.xml.gz):"${NIFI_HOME}/conf/flow.xml.gz" \
     -v $(realpath ./certs):/opt/certs:ro \
     -v $(realpath ./repos/flowfile_repository):"${NIFI_HOME}/flowfile_repository" \
@@ -21,5 +24,8 @@ docker run -i -t --rm \
     -v $(realpath ./repos/provenance_repository):"${NIFI_HOME}/provenance_repository" \
     -e KEYSTORE_PASSWORD=$(getPass certs/passwd keystorePassword) \
     -e TRUSTSTORE_PASSWORD=$(getPass certs/passwd truststorePassword)  \
-    -e SENSITIVE_PROPERTIES_KEY=`cat certs/sensitive_key` \
+    -e NIFI_PORT=${NIFI_PORT} \
+    -e REMOTE_PORT=${REMOTE_PORT} \
+    -p ${NIFI_PORT}:${NIFI_PORT} \
+    -p ${REMOTE_PORT}:${REMOTE_PORT} \
     simonellistonball/nifi
