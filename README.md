@@ -37,5 +37,27 @@ All nifis are SSL secured. The CA can be created locally, however, key parts wil
 
 
 Custom nars used:
-https://github.com/jfrazee/nifi-put-site-to-site-bundle
-https://github.com/simonellistonball/nifi-Twilio
+* https://github.com/jfrazee/nifi-put-site-to-site-bundle
+* https://github.com/simonellistonball/nifi-Twilio
+
+
+How To build
+------------
+
+in ca/
+
+    ./makeCA.sh && ./makeAllKeys.sh && ./installCerts.sh
+
+you will have to import the new `ca/CA/cacert.pem` to your keychain, and your relevant `ca/users/<name>/<name>.p12` private key using the password in the same folder.
+
+Build the nifi docker image in docker-nifi (./build.sh)
+
+Build the provisioner image in cloud/provisioner (./build.sh)
+
+run the provisioner docker (cd cloud/provisioner/ && ./runProvisioning.sh)
+run each nifi docker (secloud|booth|cloud/nifi/ && ./runNifi.sh)
+
+##TODO:
+1. some of the keystore properties will need setting in the nifi flows. This should really be scripted through API calls.
+2. Pi image builder needs incorporating to this repo
+3. Some integration tests wouldn't hurt.
