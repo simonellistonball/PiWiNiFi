@@ -39,7 +39,10 @@ sed -i -e "s|nifi.ui.banner.text=.*$|nifi.ui.banner.text=${BANNER}|" ${nifi_prop
 
 sed -i -e '/nifi.nar.library.directory/d' ${nifi_props_file}
 
-echo "nifi.nar.library.directory.dir1=./lib
+echo "
+
+# Custom Libraries
+nifi.nar.library.directory.dir1=./lib
 nifi.nar.library.directory.dir2=./custom" >> ${nifi_props_file}
 
 if [ ! -f ${NIFI_HOME}/logs/nifi-app.log ]
