@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <users>
-  <user dn="CN=sball, ou=PiWiNiFi Demo, o=Hortonworks, l=Santa Clara, st=California, c=US">
+  <user dn="CN=sball, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
     <role name="ROLE_DFM"/><role name="ROLE_ADMIN"/><role name="ROLE_PROVENANCE"/>
   </user>
-  <user dn="CN=dchaffey, ou=PiWiNiFi Demo, o=Hortonworks, l=Santa Clara, st=California, c=US">
+  <user dn="CN=dchaffey, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
     <role name="ROLE_DFM"/><role name="ROLE_ADMIN"/><role name="ROLE_PROVENANCE"/>
   </user>
 
   <!-- site-to-site roles -->
-  <user dn="CN=secloud.things.simonellistonball.com, ou=PiWiNiFi Demo, o=Hortonworks, l=Santa Clara, st=California, c=US">
+  <user dn="CN=secloud.things.simonellistonball.com, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
     <role name="ROLE_NIFI"/>
   </user>
 </users>
