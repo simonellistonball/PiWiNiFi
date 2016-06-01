@@ -29,4 +29,4 @@ docker run -i -t --rm \
     -e BANNER="Cloud Nifi" \
     -p ${NIFI_PORT}:${NIFI_PORT} \
     -p ${REMOTE_PORT}:${REMOTE_PORT} \
-    simonellistonball/nifi
+    simonellistonball/nifi $1

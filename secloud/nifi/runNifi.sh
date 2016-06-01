@@ -13,6 +13,8 @@ NIFI_HOME=/opt/nifi
 REMOTE_PORT=8446
 NIFI_PORT=8445
 
+echo $(getPass certs/passwd keystorePasswd)
+
 docker run -i -t --rm \
     -v $(realpath ./authorized-users.xml):"${NIFI_HOME}/conf/authorized-users.xml" \
     -v $(realpath ./bootstrap.conf):"${NIFI_HOME}/conf/bootstrap.conf" \
@@ -29,4 +31,4 @@ docker run -i -t --rm \
     -e BANNER="Data Center Nifi" \
     -p ${NIFI_PORT}:${NIFI_PORT} \
     -p ${REMOTE_PORT}:${REMOTE_PORT} \
-    simonellistonball/nifi
+    simonellistonball/nifi $1
