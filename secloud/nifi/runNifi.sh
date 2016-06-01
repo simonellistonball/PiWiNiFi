@@ -32,4 +32,6 @@ docker run -i -t --rm \
     -e BANNER="Data Center Nifi" \
     -p ${NIFI_PORT}:${NIFI_PORT} \
     -p ${REMOTE_PORT}:${REMOTE_PORT} \
+    --ulimit nofile=50000:50000 \
+    --ulimit nproc=10000:10000 \
     simonellistonball/nifi $1

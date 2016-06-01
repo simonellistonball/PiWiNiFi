@@ -12,8 +12,10 @@ NIFI_HOME=/opt/nifi
 
 REMOTE_PORT=8444
 NIFI_PORT=8443
+#-h cloud.things.simonellistonball.com \
 
 docker run -i -t --rm \
+    -h lonode \
     -v $(realpath ./authorized-users.xml):"${NIFI_HOME}/conf/authorized-users.xml" \
     -v $(realpath ./bootstrap.conf):"${NIFI_HOME}/conf/bootstrap.conf" \
     -v $(realpath ./flow.xml.gz):"${NIFI_HOME}/conf/flow.xml.gz" \
@@ -30,4 +32,6 @@ docker run -i -t --rm \
     -e BANNER="Cloud Nifi" \
     -p ${NIFI_PORT}:${NIFI_PORT} \
     -p ${REMOTE_PORT}:${REMOTE_PORT} \
+    --ulimit nofile=50000:50000 \
+    --ulimit nproc=10000:10000 \
     simonellistonball/nifi $1
