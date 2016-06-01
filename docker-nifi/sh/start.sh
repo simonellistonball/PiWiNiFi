@@ -28,6 +28,7 @@ sed -i -e 's|^nifi.security.truststoreType=.*$|nifi.security.truststoreType=jks|
 # Disable HTTP and enable HTTPS
 sed -i -e 's|nifi.web.http.port=.*$|nifi.web.http.port=|' ${nifi_props_file}
 sed -i -e "s|nifi.web.https.port=.*$|nifi.web.https.port=${NIFI_PORT}|" ${nifi_props_file}
+sed -i -e "s|nifi.web.https.host=.*$|nifi.web.https.host=${HOSTNAME}|" ${nifi_props_file}
 
 # Enable remote ports
 sed -i -e "s|nifi.remote.input.socket.port=.*$|nifi.remote.input.socket.port=${REMOTE_PORT}|" ${nifi_props_file}
@@ -44,6 +45,8 @@ echo "
 # Custom Libraries
 nifi.nar.library.directory.dir1=./lib
 nifi.nar.library.directory.dir2=./custom" >> ${nifi_props_file}
+
+[ ! -z "$NO_RESUME" ] && sed -i -e 's|nifi.flowcontroller.autoResumeState=true|nifi.flowcontroller.autoResumeState=false|' ${nifi_props_file}
 
 if [ ! -f ${NIFI_HOME}/logs/nifi-app.log ]
 then
