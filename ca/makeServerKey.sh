@@ -7,7 +7,7 @@ DNS='.things.simonellistonball.com'
 
 random-string()
 {
-  LC_CTYPE=C tr -dc "a-zA-Z0-9!@#$%^&*()_+?><~\`;'" < /dev/urandom | fold -w ${1:-32} | head -n 1
+  LC_CTYPE=C tr -dc "a-zA-Z0-9!@#%^*()_+?~;'" < /dev/urandom | fold -w ${1:-32} | head -n 1
 }
 
 PASSLEN=32
@@ -43,6 +43,12 @@ echo "Signing client certificate"
 #openssl x509 -req -days $DAYS -in ${NAME}.client.csr -CA ca.crt -CAkey ca.key -out ${NAME}.client.crt -passin file:ca-passwd
 openssl ca -batch -config openssl.conf -passin file:ca-passwd -out $REQPATH/${NAME}.client.crt -infiles $REQPATH/${NAME}.client.csr
 
+echo "Convert to p12"
+openssl pkcs12 -export -in $REQPATH/${NAME}.server.crt -inkey $REQPATH/${NAME}.server.key \
+               -passin pass:$PASSWORD \
+               -passout pass:$PASSWORD \
+               -out $REQPATH/${NAME}.server.p12 -name ${NAME}${DNS} \
+               -CAfile CA/cacert.pem -caname CApiwinifi
 
 truststorePasswd=$(random-string 32)
 keystorePasswd=$(random-string 32)
@@ -53,10 +59,18 @@ echo "keystorePasswd: $keystorePasswd" > $REQPATH/pass-keystore
 echo "keyPasswd: $keyPasswd" >> $REQPATH/pass-key
 
 # create server keystore
-${keytool} -import -alias ${NAME}${DNS} -storepass $keystorePasswd -file $REQPATH/${NAME}.server.crt -keystore $REQPATH/${NAME}.server.keystore.jks
+#${keytool} -import -alias ${NAME}${DNS} -storepass $keystorePasswd -file $REQPATH/${NAME}.server.key -keystore $REQPATH/${NAME}.server.keystore.jks
+echo "Import Keystore"
+${keytool} -importkeystore \
+        -deststorepass $keystorePasswd -destkeypass $keyPasswd -destkeystore $REQPATH/${NAME}.server.keystore.jks \
+        -srckeystore $REQPATH/${NAME}.server.p12 -srcstoretype PKCS12 -srcstorepass $PASSWORD \
+        -alias ${NAME}${DNS}
+${keytool} -import -alias CAcert -storepass $keystorePasswd -file CA/cacert.pem -keystore $REQPATH/${NAME}.server.keystore.jks
 
 # create truststore
+echo "Import Truststore"
 ${keytool} -import -alias CAcert -storepass $truststorePasswd -file CA/cacert.pem -keystore $REQPATH/${NAME}.truststore.jks
 
 # create client keystore
+echo "Import clientstore"
 ${keytool} -import -alias ${NAME}Client -storepass $keystorePasswd -file $REQPATH/${NAME}.client.crt -keystore $REQPATH/${NAME}.client.keystore.jks
