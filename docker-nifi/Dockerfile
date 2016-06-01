@@ -11,8 +11,8 @@ RUN             mkdir -p /opt/nifi && \
                 curl ${DIST_MIRROR}/${VERSION}/nifi-${VERSION}-bin.tar.gz | tar xvz -C ${NIFI_HOME} --strip-components=1
 
 # Expose web port
-EXPOSE          8443 8444
-VOLUME          ["/opt/certs", "${NIFI_HOME}/flowfile_repository", "${NIFI_HOME}/database_repository", "${NIFI_HOME}/content_repository", "${NIFI_HOME}/provenance_repository"]
+EXPOSE          8443-8448
+VOLUME          ["/opt/certs", "${NIFI_HOME}/custom", "${NIFI_HOME}/flowfile_repository", "${NIFI_HOME}/database_repository", "${NIFI_HOME}/content_repository", "${NIFI_HOME}/provenance_repository"]
 
 ADD             ./sh/ /opt/sh
 RUN             chmod a+x /opt/sh/start.sh

@@ -1,0 +1,6 @@
+[submodule "custom/nifi-Twilio"]
+	path = custom/nifi-Twilio
+	url = https://github.com/simonellistonball/nifi-Twilio
+[submodule "custom/nifi-put-site-to-site-bundle"]
+	path = custom/nifi-put-site-to-site-bundle
+	url = https://github.com/jfrazee/nifi-put-site-to-site-bundle

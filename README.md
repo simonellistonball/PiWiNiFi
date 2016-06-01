@@ -34,3 +34,8 @@ Each service includes a run command, which assumes a docker environment. Note th
 Each system is setup to allow site-to-site.
 
 All nifis are SSL secured. The CA can be created locally, however, key parts will be uploaded to the provisioner application so it can create certificates for the pis.
+
+
+Custom nars used:
+https://github.com/jfrazee/nifi-put-site-to-site-bundle
+https://github.com/simonellistonball/nifi-Twilio

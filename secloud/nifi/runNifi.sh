@@ -19,6 +19,7 @@ docker run -i -t --rm \
     -v $(realpath ./authorized-users.xml):"${NIFI_HOME}/conf/authorized-users.xml" \
     -v $(realpath ./bootstrap.conf):"${NIFI_HOME}/conf/bootstrap.conf" \
     -v $(realpath ./flow.xml.gz):"${NIFI_HOME}/conf/flow.xml.gz" \
+    -v $(realpath ./custom):"${NIFI_HOME}/custom" \
     -v $(realpath ./certs):/opt/certs:ro \
     -v $(realpath ./repos/flowfile_repository):"${NIFI_HOME}/flowfile_repository" \
     -v $(realpath ./repos/database_repository):"${NIFI_HOME}/database_repository" \
