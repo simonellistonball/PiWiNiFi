@@ -1,0 +1,6 @@
+Pillow>=2.6.1
+sense-hat>=2.1.0
+scapy>=2.3
+netaddr>=0.7
+syslog_rfc5424_formatter
+awscli
