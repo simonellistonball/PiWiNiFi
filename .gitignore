@@ -1,3 +1,9 @@
 **/certs/
 **/repos/
 *.nar
+.idea
+/pi/deploy/client.key
+/pi/deploy/ca.crt
+/pi/deploy/client.crt
+/pi/deploy/nifi.tar.gz
+/pi/deploy/prov-client-passwd
