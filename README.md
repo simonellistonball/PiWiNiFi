@@ -59,16 +59,19 @@ run each nifi docker (secloud|booth|cloud/nifi/ && ./runNifi.sh)
 
 #### RPi deployment
 
-in pi/deploy, edit deploy.cfg to contain your deployment information (Event WiFi, Timezone, and Bastion host running deployment service)
-Put your version of NiFi into the pi/deploy directory as nifi.tar.gz(suggest a cut down version of just the /nifi/* content)
-Deploy Rasbian to your Raspberry Pi3
-Power on the device in the intended location
-Copy the contents of the pi/deploy directory to the /home/pi/ directory. 
+* In pi/deploy, edit deploy.cfg to contain your deployment information (Event WiFi, Timezone, and Bastion host running deployment service)
+* Put your version of NiFi into the pi/deploy directory as nifi.tar.gz (suggest a cut down version of just the /nifi/* content)
+* Deploy Rasbian to your Raspberry Pi3
+* Power on the device in the intended location
+* Copy the contents of the pi/deploy directory to the /home/pi/ directory.
+
 This is easily achieved via a direct ethernet connection (Mac: Internet sharing to Thunderbolt adapter, connect to RPi, "arp -a | grep 192.168.2" to find the DHCP ip)
-Execute the pi/deploy/bootstrap.sh script as root (sudo /home/pi/deploy/bootstrap.sh)
+
+* Execute the pi/deploy/bootstrap.sh script as root (sudo /home/pi/deploy/bootstrap.sh)
+
 Script logs to /var/log/piwinifi_bootstrap.log
-Once the RPi has bootstraped and rebooted, check /var/log/piwinifi_launcher.log for expected boot and connect behavior, nifi start, etc.
-Then connect to the Bastion host to authorise the RPi device to connect to NiFi.
+
+Once the RPi has bootstraped and rebooted, check /var/log/piwinifi_launcher.log for expected boot and connect behavior, nifi start, etc. Then connect to the Bastion host to authorise the RPi device to connect to NiFi.
 
 ##TODO:
 1. some of the keystore properties will need setting in the nifi flows. This should really be scripted through API calls.
