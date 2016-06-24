@@ -1,0 +1,1955 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flowController>
+  <maxTimerDrivenThreadCount>10</maxTimerDrivenThreadCount>
+  <maxEventDrivenThreadCount>5</maxEventDrivenThreadCount>
+  <rootGroup>
+    <id>3042b954-defa-483f-b6e0-271a695d7f22</id>
+    <name>hswBastion</name>
+    <position x="0.0" y="0.0"/>
+    <comment/>
+    <processor>
+      <id>d9f85081-48f1-4abd-bbba-e86acd964a3f</id>
+      <name>Mask Sensitive Values</name>
+      <position x="269.4584991674317" y="311.90295631129584"/>
+      <styles/>
+      <comment/>
+      <class>org.apache.nifi.processors.standard.ReplaceText</class>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <schedulingPeriod>0 sec</schedulingPeriod>
+      <penalizationPeriod>30 sec</penalizationPeriod>
+      <yieldPeriod>1 sec</yieldPeriod>
+      <bulletinLevel>WARN</bulletinLevel>
+      <lossTolerant>false</lossTolerant>
+      <scheduledState>RUNNING</scheduledState>
+      <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+      <runDurationNanos>0</runDurationNanos>
+      <property>
+        <name>Regular Expression</name>
+        <value>\d{16}</value>
+      </property>
+      <property>
+        <name>Replacement Value</name>
+        <value>xxxxxxxxxxx</value>
+      </property>
+      <property>
+        <name>Character Set</name>
+        <value>UTF-8</value>
+      </property>
+      <property>
+        <name>Maximum Buffer Size</name>
+        <value>1 MB</value>
+      </property>
+      <property>
+        <name>Replacement Strategy</name>
+        <value>Regex Replace</value>
+      </property>
+      <property>
+        <name>Evaluation Mode</name>
+        <value>Entire text</value>
+      </property>
+      <autoTerminatedRelationship>failure</autoTerminatedRelationship>
+    </processor>
+    <processor>
+      <id>b79e6c1b-fb5b-4cc3-a0ea-17c39754d480</id>
+      <name>Set low priority for lookups</name>
+      <position x="1723.4794006051848" y="646.3697976445079"/>
+      <styles/>
+      <comment/>
+      <class>org.apache.nifi.processors.attributes.UpdateAttribute</class>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <schedulingPeriod>0 sec</schedulingPeriod>
+      <penalizationPeriod>30 sec</penalizationPeriod>
+      <yieldPeriod>1 sec</yieldPeriod>
+      <bulletinLevel>WARN</bulletinLevel>
+      <lossTolerant>false</lossTolerant>
+      <scheduledState>RUNNING</scheduledState>
+      <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+      <runDurationNanos>0</runDurationNanos>
+      <property>
+        <name>Delete Attributes Expression</name>
+      </property>
+      <property>
+        <name>priority</name>
+        <value>10</value>
+      </property>
+    </processor>
+    <processor>
+      <id>318ecbb6-7072-43e4-83f0-74cfeb16501a</id>
+      <name>Web Service Interface to send commands</name>
+      <position x="854.3475673465459" y="335.9429641366934"/>
+      <styles/>
+      <comment/>
+      <class>org.apache.nifi.processors.standard.ListenHTTP</class>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <schedulingPeriod>0 sec</schedulingPeriod>
+      <penalizationPeriod>30 sec</penalizationPeriod>
+      <yieldPeriod>1 sec</yieldPeriod>
+      <bulletinLevel>WARN</bulletinLevel>
+      <lossTolerant>false</lossTolerant>
+      <scheduledState>STOPPED</scheduledState>
+      <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+      <runDurationNanos>0</runDurationNanos>
+      <property>
+        <name>Base Path</name>
+        <value>commands</value>
+      </property>
+      <property>
+        <name>Listening Port</name>
+        <value>8445</value>
+      </property>
+      <property>
+        <name>Max Data to Receive per Second</name>
+      </property>
+      <property>
+        <name>SSL Context Service</name>
+        <value>d1cedd00-02d3-41ba-a592-006eaecdefae</value>
+      </property>
+      <property>
+        <name>Authorized DN Pattern</name>
+        <value>.*</value>
+      </property>
+      <property>
+        <name>Max Unconfirmed Flowfile Time</name>
+        <value>60 secs</value>
+      </property>
+      <property>
+        <name>HTTP Headers to receive as Attributes (Regex)</name>
+      </property>
+    </processor>
+    <processor>
+      <id>ff94f7d2-6504-4f05-8874-019ff86ed3be</id>
+      <name>Set High Priority for Commands</name>
+      <position x="1278.1805724801848" y="655.9599465702892"/>
+      <styles/>
+      <comment/>
+      <class>org.apache.nifi.processors.attributes.UpdateAttribute</class>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <schedulingPeriod>0 sec</schedulingPeriod>
+      <penalizationPeriod>30 sec</penalizationPeriod>
+      <yieldPeriod>1 sec</yieldPeriod>
+      <bulletinLevel>WARN</bulletinLevel>
+      <lossTolerant>false</lossTolerant>
+      <scheduledState>RUNNING</scheduledState>
+      <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+      <runDurationNanos>0</runDurationNanos>
+      <property>
+        <name>Delete Attributes Expression</name>
+      </property>
+      <property>
+        <name>priority</name>
+        <value>1</value>
+      </property>
+      <property>
+        <name>destination</name>
+        <value>all</value>
+      </property>
+    </processor>
+    <processor>
+      <id>2f36d2ea-ff03-41b3-aa33-de66427836d8</id>
+      <name>Spool directory for commands</name>
+      <position x="856.7250939243506" y="460.981154121812"/>
+      <styles/>
+      <comment/>
+      <class>org.apache.nifi.processors.standard.GetFile</class>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <schedulingPeriod>10 sec</schedulingPeriod>
+      <penalizationPeriod>30 sec</penalizationPeriod>
+      <yieldPeriod>1 sec</yieldPeriod>
+      <bulletinLevel>WARN</bulletinLevel>
+      <lossTolerant>false</lossTolerant>
+      <scheduledState>RUNNING</scheduledState>
+      <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+      <runDurationNanos>0</runDurationNanos>
+      <property>
+        <name>Input Directory</name>
+        <value>./commands</value>
+      </property>
+      <property>
+        <name>File Filter</name>
+        <value>[^\.].*</value>
+      </property>
+      <property>
+        <name>Path Filter</name>
+      </property>
+      <property>
+        <name>Batch Size</name>
+        <value>10</value>
+      </property>
+      <property>
+        <name>Keep Source File</name>
+        <value>false</value>
+      </property>
+      <property>
+        <name>Recurse Subdirectories</name>
+        <value>true</value>
+      </property>
+      <property>
+        <name>Polling Interval</name>
+        <value>0 sec</value>
+      </property>
+      <property>
+        <name>Ignore Hidden Files</name>
+        <value>true</value>
+      </property>
+      <property>
+        <name>Minimum File Age</name>
+        <value>0 sec</value>
+      </property>
+      <property>
+        <name>Maximum File Age</name>
+      </property>
+      <property>
+        <name>Minimum File Size</name>
+        <value>0 B</value>
+      </property>
+      <property>
+        <name>Maximum File Size</name>
+      </property>
+    </processor>
+    <inputPort>
+      <id>35fd994b-4950-4f13-8b24-8469f417329b</id>
+      <name>from RPi Remote Control</name>
+      <position x="208.88814296309278" y="673.8138878874756"/>
+      <comments/>
+      <scheduledState>RUNNING</scheduledState>
+      <maxConcurrentTasks>4</maxConcurrentTasks>
+      <userAccessControl>CN=pi333eef.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi1cd960.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pid98733.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi2e7c88.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pif038b1.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi351bc7.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi93aea3.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+    </inputPort>
+    <inputPort>
+      <id>da67c7e3-e965-40c1-8156-6941a227de01</id>
+      <name>Lookups From Internal Prod</name>
+      <position x="1799.5782775583098" y="515.2401284550548"/>
+      <comments/>
+      <scheduledState>RUNNING</scheduledState>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <userAccessControl>CN=hs16w05.cloud.hortonworks.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=secloud.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+    </inputPort>
+    <inputPort>
+      <id>def0e7a1-5d2d-4e53-bda0-f4ecf3ad5b9b</id>
+      <name>from RPi Sensors</name>
+      <position x="210.29659717032013" y="528.7104332212156"/>
+      <comments/>
+      <scheduledState>RUNNING</scheduledState>
+      <maxConcurrentTasks>8</maxConcurrentTasks>
+      <userAccessControl>CN=pi333eef.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi5aedda.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi2e7c88.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pif038b1.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi351bc7.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi52a489.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi1cd960.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pid98733.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pifc2a2d.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi4d359f.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=piee3450.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=pi93aea3.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+    </inputPort>
+    <inputPort>
+      <id>0943337a-78e0-4e53-92b3-678eb6db9268</id>
+      <name>from SECloud</name>
+      <position x="1394.8975830078125" y="323.8443908691406"/>
+      <comments/>
+      <scheduledState>RUNNING</scheduledState>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <userAccessControl>CN=hs16w05.cloud.hortonworks.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=secloud.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+    </inputPort>
+    <outputPort>
+      <id>df9e4666-634c-4fa2-b673-a16acc595bc4</id>
+      <name>destinations</name>
+      <position x="2244.9743326257408" y="592.9255804194133"/>
+      <comments/>
+      <scheduledState>RUNNING</scheduledState>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <userAccessControl>CN=booth.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+    </outputPort>
+    <outputPort>
+      <id>275716dd-7e2c-4d74-a7ce-b2aa147897c1</id>
+      <name>for simon</name>
+      <position x="342.56892301839025" y="186.10587899870688"/>
+      <comments/>
+      <scheduledState>STOPPED</scheduledState>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <userAccessControl>CN=sball, OU=Summit Demo PoC, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+    </outputPort>
+    <outputPort>
+      <id>500fc7ba-6b4f-4c6d-b9be-b746cc6a4ffc</id>
+      <name>to Internal Prod</name>
+      <position x="600.7728695750052" y="529.9418804824586"/>
+      <comments/>
+      <scheduledState>RUNNING</scheduledState>
+      <maxConcurrentTasks>8</maxConcurrentTasks>
+      <userAccessControl>CN=hs16w05.cloud.hortonworks.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=secloud.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+    </outputPort>
+    <outputPort>
+      <id>5b2a4959-c064-4278-8f41-076be8673df7</id>
+      <name>to Booth</name>
+      <position x="1516.746999361139" y="969.1220182136385"/>
+      <comments/>
+      <scheduledState>RUNNING</scheduledState>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <userAccessControl>CN=booth.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+    </outputPort>
+    <outputPort>
+      <id>8c37e2cd-ee9b-44e3-a60b-ec17a2306393</id>
+      <name>Device Logs</name>
+      <position x="599.9087829294035" y="669.2560891484142"/>
+      <comments/>
+      <scheduledState>RUNNING</scheduledState>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <userAccessControl>CN=hs16w05.cloud.hortonworks.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+      <userAccessControl>CN=secloud.things.simonellistonball.com, OU=Summit Demo, O=Hortonworks, L=Dublin, ST=Ireland, C=IE</userAccessControl>
+    </outputPort>
+    <label>
+      <id>b4a1484d-acb7-4b23-869b-b213edeeb4bc</id>
+      <position x="1731.2280578317473" y="387.29377835739854"/>
+      <size height="91.99998474121094" width="277.0000305175781"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Lookup tables are generated by a process
+in the SEcloud. These files are send down
+to the devices to enrich data for prioritisation,
+these are used to prioritise reports on the
+data from certain devices.</value>
+    </label>
+    <label>
+      <id>3d07effc-ca0d-4e6c-9d7b-639c7d856864</id>
+      <position x="840.9144542101843" y="293.63988130597454"/>
+      <size height="284.640625" width="767.3121948242188"/>
+      <styles>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Send Commands out to All Devices</value>
+    </label>
+    <label>
+      <id>102e798c-b32c-45ca-a343-1d0c57558eae</id>
+      <position x="190.5041177969432" y="492.73615118418"/>
+      <size height="114.63389587402344" width="593.28076171875"/>
+      <styles>
+        <style name="background-color">#006b15</style>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Sensor Data proxy and Pass to DMZ cloud</value>
+    </label>
+    <label>
+      <id>48eed522-f9ca-4d68-bb6e-bb9ed33474da</id>
+      <position x="188.77690639082718" y="638.4124518698472"/>
+      <size height="107.93621063232422" width="592.7728271484375"/>
+      <styles>
+        <style name="background-color">#ff8282</style>
+        <style name="font-size">12px</style>
+      </styles>
+      <value>Response From Devices to Commands
+</value>
+    </label>
+    <funnel>
+      <id>33bf6177-3442-4a67-a15f-d693429db1ea</id>
+      <position x="1568.3744201364348" y="862.6597146366954"/>
+    </funnel>
+    <funnel>
+      <id>3e37f20f-8bda-4e83-afeb-0a446f1b4fb3</id>
+      <position x="1398.7236633004973" y="489.75996488083604"/>
+    </funnel>
+    <funnel>
+      <id>0d3f6be1-2771-49a1-aa57-3b1eee3d3d19</id>
+      <position x="-150.53168967344072" y="607.022690710914"/>
+    </funnel>
+    <processGroup>
+      <id>92f1f015-8657-4e5e-a119-4afe9d74dd6a</id>
+      <name>Notify Me</name>
+      <position x="-304.7448257186395" y="755.1006805583256"/>
+      <comment/>
+      <processor>
+        <id>1c27014d-9c8a-40f1-b064-130118fd8772</id>
+        <name>ControlRate</name>
+        <position x="-513.9902038870027" y="758.9145058964609"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.ControlRate</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Rate Control Criteria</name>
+          <value>flowfile count</value>
+        </property>
+        <property>
+          <name>Maximum Rate</name>
+          <value>1</value>
+        </property>
+        <property>
+          <name>Rate Controlled Attribute</name>
+        </property>
+        <property>
+          <name>Time Duration</name>
+          <value>1 hour</value>
+        </property>
+        <property>
+          <name>Grouping Attribute</name>
+        </property>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
+      </processor>
+      <processor>
+        <id>7daec022-bfd1-4f48-ab0e-fc899e0c1aa0</id>
+        <name>PutEmail</name>
+        <position x="-516.8180847463777" y="944.8283852909922"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.PutEmail</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>5 min</schedulingPeriod>
+        <penalizationPeriod>5 min</penalizationPeriod>
+        <yieldPeriod>10 min</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>SMTP Hostname</name>
+          <value>smtp.gmail.com</value>
+        </property>
+        <property>
+          <name>SMTP Port</name>
+          <value>465</value>
+        </property>
+        <property>
+          <name>SMTP Username</name>
+          <value>simon@simonellistonball.com</value>
+        </property>
+        <property>
+          <name>SMTP Password</name>
+          <value></value>
+        </property>
+        <property>
+          <name>SMTP Auth</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>SMTP TLS</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>SMTP Socket Factory</name>
+          <value>javax.net.ssl.SSLSocketFactory</value>
+        </property>
+        <property>
+          <name>SMTP X-Mailer Header</name>
+          <value>NiFi</value>
+        </property>
+        <property>
+          <name>Content Type</name>
+          <value>text/plain</value>
+        </property>
+        <property>
+          <name>From</name>
+          <value>simon@simonellistonball.com</value>
+        </property>
+        <property>
+          <name>To</name>
+          <value>sball@hortonworks.com</value>
+        </property>
+        <property>
+          <name>CC</name>
+          <value>dchaffey@hortonworks.com</value>
+        </property>
+        <property>
+          <name>BCC</name>
+        </property>
+        <property>
+          <name>Subject</name>
+          <value>Message from NiFi</value>
+        </property>
+        <property>
+          <name>Message</name>
+          <value>Some data came!</value>
+        </property>
+        <property>
+          <name>Attach File</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>Include All Attributes In Message</name>
+          <value>true</value>
+        </property>
+        <autoTerminatedRelationship>success</autoTerminatedRelationship>
+      </processor>
+      <inputPort>
+        <id>5b09e6d2-6a47-493e-81a0-0042e5491538</id>
+        <name>data</name>
+        <position x="-437.818134983036" y="652.914431187078"/>
+        <comments/>
+        <scheduledState>RUNNING</scheduledState>
+      </inputPort>
+      <connection>
+        <id>68e4b107-ef8d-4682-8ca7-934fdf8c3051</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>5b09e6d2-6a47-493e-81a0-0042e5491538</sourceId>
+        <sourceGroupId>92f1f015-8657-4e5e-a119-4afe9d74dd6a</sourceGroupId>
+        <sourceType>INPUT_PORT</sourceType>
+        <destinationId>1c27014d-9c8a-40f1-b064-130118fd8772</destinationId>
+        <destinationGroupId>92f1f015-8657-4e5e-a119-4afe9d74dd6a</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship/>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>1 hour</flowFileExpiration>
+      </connection>
+      <connection>
+        <id>b7612f32-606b-4b12-9bc4-edef7c7afaba</id>
+        <name/>
+        <bendPoints>
+          <bendPoint x="-107.81808474637774" y="969.8283852909922"/>
+          <bendPoint x="-107.81808474637774" y="1019.8283852909922"/>
+        </bendPoints>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>7daec022-bfd1-4f48-ab0e-fc899e0c1aa0</sourceId>
+        <sourceGroupId>92f1f015-8657-4e5e-a119-4afe9d74dd6a</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>7daec022-bfd1-4f48-ab0e-fc899e0c1aa0</destinationId>
+        <destinationGroupId>92f1f015-8657-4e5e-a119-4afe9d74dd6a</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>failure</relationship>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+      </connection>
+      <connection>
+        <id>36daa76c-7ce6-4ec8-b660-bb8aa6e94f3d</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>1c27014d-9c8a-40f1-b064-130118fd8772</sourceId>
+        <sourceGroupId>92f1f015-8657-4e5e-a119-4afe9d74dd6a</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>7daec022-bfd1-4f48-ab0e-fc899e0c1aa0</destinationId>
+        <destinationGroupId>92f1f015-8657-4e5e-a119-4afe9d74dd6a</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>10 mins</flowFileExpiration>
+      </connection>
+    </processGroup>
+    <processGroup>
+      <id>83a68efc-7f14-48a9-9f5a-eddc40c0d702</id>
+      <name>Demo</name>
+      <position x="114.16424316281234" y="1296.1935301987683"/>
+      <comment/>
+      <processor>
+        <id>545fe7bb-952e-41e1-a94b-666f47119108</id>
+        <name>ListenUDP</name>
+        <position x="58.71820617798477" y="-2.1832950954513137"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.ListenUDP</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>STOPPED</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Local Network Interface</name>
+        </property>
+        <property>
+          <name>Port</name>
+        </property>
+        <property>
+          <name>Receive Buffer Size</name>
+          <value>65507 B</value>
+        </property>
+        <property>
+          <name>Max Size of Message Queue</name>
+          <value>10000</value>
+        </property>
+        <property>
+          <name>Max Size of Socket Buffer</name>
+          <value>1 MB</value>
+        </property>
+        <property>
+          <name>Character Set</name>
+          <value>UTF-8</value>
+        </property>
+        <property>
+          <name>Max Batch Size</name>
+          <value>1</value>
+        </property>
+        <property>
+          <name>Message Delimiter</name>
+          <value>\n</value>
+        </property>
+        <property>
+          <name>Sending Host</name>
+        </property>
+        <property>
+          <name>Sending Host Port</name>
+        </property>
+      </processor>
+      <processor>
+        <id>f088140b-f389-4e26-81be-3a19f000a13d</id>
+        <name>ReplaceText</name>
+        <position x="404.0000087263589" y="347.0113463384572"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.ReplaceText</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>STOPPED</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Regular Expression</name>
+          <value>(?s:^.*$)</value>
+        </property>
+        <property>
+          <name>Replacement Value</name>
+          <value>$1</value>
+        </property>
+        <property>
+          <name>Character Set</name>
+          <value>UTF-8</value>
+        </property>
+        <property>
+          <name>Maximum Buffer Size</name>
+          <value>1 MB</value>
+        </property>
+        <property>
+          <name>Replacement Strategy</name>
+          <value>Regex Replace</value>
+        </property>
+        <property>
+          <name>Evaluation Mode</name>
+          <value>Entire text</value>
+        </property>
+      </processor>
+      <processor>
+        <id>f685aa2b-ccbf-4f60-b3b0-0063c6849bc3</id>
+        <name>ListenTCP</name>
+        <position x="79.78420367264795" y="141.8370299322072"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.ListenTCP</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>STOPPED</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Local Network Interface</name>
+        </property>
+        <property>
+          <name>Port</name>
+        </property>
+        <property>
+          <name>Receive Buffer Size</name>
+          <value>65507 B</value>
+        </property>
+        <property>
+          <name>Max Size of Message Queue</name>
+          <value>10000</value>
+        </property>
+        <property>
+          <name>Max Size of Socket Buffer</name>
+          <value>1 MB</value>
+        </property>
+        <property>
+          <name>Character Set</name>
+          <value>UTF-8</value>
+        </property>
+        <property>
+          <name>Max Batch Size</name>
+          <value>1</value>
+        </property>
+        <property>
+          <name>Message Delimiter</name>
+          <value>\n</value>
+        </property>
+        <property>
+          <name>Max Number of TCP Connections</name>
+          <value>2</value>
+        </property>
+        <property>
+          <name>SSL Context Service</name>
+        </property>
+        <property>
+          <name>Client Auth</name>
+          <value>REQUIRED</value>
+        </property>
+      </processor>
+      <processor>
+        <id>e75b9faa-9072-4935-b3ec-04395e76e071</id>
+        <name>ConvertJSONToAvro</name>
+        <position x="605.0000087263588" y="106.0113463384572"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.kite.ConvertJSONToAvro</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>STOPPED</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Hadoop configuration files</name>
+        </property>
+        <property>
+          <name>Record schema</name>
+        </property>
+      </processor>
+      <connection>
+        <id>f3495ed1-812a-46dc-a8cb-9dffe022ff74</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>f685aa2b-ccbf-4f60-b3b0-0063c6849bc3</sourceId>
+        <sourceGroupId>83a68efc-7f14-48a9-9f5a-eddc40c0d702</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>e75b9faa-9072-4935-b3ec-04395e76e071</destinationId>
+        <destinationGroupId>83a68efc-7f14-48a9-9f5a-eddc40c0d702</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>100</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+        <queuePrioritizerClass>org.apache.nifi.prioritizer.NewestFlowFileFirstPrioritizer</queuePrioritizerClass>
+        <queuePrioritizerClass>org.apache.nifi.prioritizer.PriorityAttributePrioritizer</queuePrioritizerClass>
+      </connection>
+    </processGroup>
+    <processGroup>
+      <id>b868e750-fbae-46ce-bde4-037c86646032</id>
+      <name>SMS Notification Sevices</name>
+      <position x="-301.316406016987" y="377.1768390650136"/>
+      <comment/>
+      <processor>
+        <id>2c7df614-ed27-462a-b326-2c538981d436</id>
+        <name>ReplaceText</name>
+        <position x="1967.4604640614016" y="967.382342693969"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.ReplaceText</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Regular Expression</name>
+          <value>(?s:^.*$)</value>
+        </property>
+        <property>
+          <name>Replacement Value</name>
+          <value>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Response&gt;
+    &lt;Message&gt;Thank you!&lt;/Message&gt;
+&lt;/Response&gt;</value>
+        </property>
+        <property>
+          <name>Character Set</name>
+          <value>UTF-8</value>
+        </property>
+        <property>
+          <name>Maximum Buffer Size</name>
+          <value>1 MB</value>
+        </property>
+        <property>
+          <name>Replacement Strategy</name>
+          <value>Regex Replace</value>
+        </property>
+        <property>
+          <name>Evaluation Mode</name>
+          <value>Entire text</value>
+        </property>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
+      </processor>
+      <processor>
+        <id>82eae8ac-449f-4d5c-abb7-0204d96875aa</id>
+        <name>HandleHttpResponse</name>
+        <position x="1978.0415281088053" y="1137.6434248983046"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.HandleHttpResponse</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>STOPPED</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>HTTP Status Code</name>
+          <value>201</value>
+        </property>
+        <property>
+          <name>HTTP Context Map</name>
+          <value>ec551183-f31d-4ff0-b356-cbc5d3ffe7a5</value>
+        </property>
+        <property>
+          <name>Content-Type</name>
+          <value>application/xml</value>
+        </property>
+        <autoTerminatedRelationship>success</autoTerminatedRelationship>
+        <autoTerminatedRelationship>failure</autoTerminatedRelationship>
+      </processor>
+      <processor>
+        <id>b78f47a4-e9e3-4d7d-a637-f471fad21295</id>
+        <name>FetchDistributedMapCache</name>
+        <position x="2361.8507132451127" y="813.4739024195403"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.FetchDistributedMapCache</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>STOPPED</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Cache Entry Identifier</name>
+          <value>${hash.value}</value>
+        </property>
+        <property>
+          <name>Distributed Cache Service</name>
+          <value>7f4b0c6c-879d-46b5-a09e-f460ec3891fa</value>
+        </property>
+        <property>
+          <name>Put Cache Value In Attribute</name>
+        </property>
+        <property>
+          <name>Max Length To Put In Attribute</name>
+          <value>256</value>
+        </property>
+        <property>
+          <name>Character Set</name>
+          <value>UTF-8</value>
+        </property>
+      </processor>
+      <processor>
+        <id>2b66606e-abbb-4eff-96f2-b29329c46718</id>
+        <name>Incoming SMS</name>
+        <position x="2174.897983763304" y="565.2650471528763"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.HandleHttpRequest</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>STOPPED</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Listening Port</name>
+          <value>8444</value>
+        </property>
+        <property>
+          <name>Hostname</name>
+        </property>
+        <property>
+          <name>SSL Context Service</name>
+          <value>d1cedd00-02d3-41ba-a592-006eaecdefae</value>
+        </property>
+        <property>
+          <name>HTTP Context Map</name>
+          <value>ec551183-f31d-4ff0-b356-cbc5d3ffe7a5</value>
+        </property>
+        <property>
+          <name>Allowed Paths</name>
+          <value>/messageReplies</value>
+        </property>
+        <property>
+          <name>Default URL Character Set</name>
+          <value>UTF-8</value>
+        </property>
+        <property>
+          <name>Allow GET</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Allow POST</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>Allow PUT</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Allow DELETE</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Allow HEAD</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Allow OPTIONS</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Additional HTTP Methods</name>
+        </property>
+        <property>
+          <name>Client Authentication</name>
+          <value>No Authentication</value>
+        </property>
+      </processor>
+      <processor>
+        <id>db706010-074d-4365-80f9-6ce091736ac6</id>
+        <name>DetectDuplicate</name>
+        <position x="1938.6027537220943" y="802.8927083600258"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.DetectDuplicate</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>STOPPED</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Cache Entry Identifier</name>
+          <value>${hash.value}</value>
+        </property>
+        <property>
+          <name>FlowFile Description</name>
+          <value/>
+        </property>
+        <property>
+          <name>Age Off Duration</name>
+        </property>
+        <property>
+          <name>Distributed Cache Service</name>
+        </property>
+        <property>
+          <name>Cache The Entry Identifier</name>
+          <value>true</value>
+        </property>
+      </processor>
+      <inputPort>
+        <id>ddf6b028-225c-405d-a631-e568a0afe47d</id>
+        <name>SMS</name>
+        <position x="2798.5654266148304" y="777.8826837763332"/>
+        <comments/>
+        <scheduledState>RUNNING</scheduledState>
+      </inputPort>
+      <inputPort>
+        <id>870fdbb7-cd15-4e81-935a-b70006dd77ca</id>
+        <name>Request</name>
+        <position x="3158.8598867630567" y="555.1342112038662"/>
+        <comments/>
+        <scheduledState>RUNNING</scheduledState>
+      </inputPort>
+      <processGroup>
+        <id>9990ff0f-ac1e-49c9-be88-5422eacb57df</id>
+        <name>Find Person on Duty</name>
+        <position x="3056.362160234483" y="682.6517051812671"/>
+        <comment/>
+        <inputPort>
+          <id>dda65409-688d-44c8-9c0c-b6567688498e</id>
+          <name>Request</name>
+          <position x="656.9999576543446" y="87.00000311464879"/>
+          <comments/>
+          <scheduledState>STOPPED</scheduledState>
+        </inputPort>
+        <outputPort>
+          <id>90467436-d1b0-44db-b8c5-b415ef86fb2f</id>
+          <name>SMS</name>
+          <position x="779.9998966191883" y="554.0000031146487"/>
+          <comments/>
+          <scheduledState>STOPPED</scheduledState>
+        </outputPort>
+      </processGroup>
+      <processGroup>
+        <id>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</id>
+        <name>Send SMS</name>
+        <position x="3062.133766089568" y="935.63868726856"/>
+        <comment/>
+        <processor>
+          <id>c7dfac94-f7a7-46a6-9681-843322e48c89</id>
+          <name>PutSMSTwilio</name>
+          <position x="2557.8297760476644" y="1010.5518547395038"/>
+          <styles/>
+          <comment/>
+          <class>com.simonellistonball.nifi.twilio.PutSMSTwilio</class>
+          <maxConcurrentTasks>1</maxConcurrentTasks>
+          <schedulingPeriod>5 sec</schedulingPeriod>
+          <penalizationPeriod>30 sec</penalizationPeriod>
+          <yieldPeriod>1 sec</yieldPeriod>
+          <bulletinLevel>WARN</bulletinLevel>
+          <lossTolerant>false</lossTolerant>
+          <scheduledState>STOPPED</scheduledState>
+          <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+          <runDurationNanos>0</runDurationNanos>
+          <property>
+            <name>Account Id</name>
+            <value>ACfdfcb61e24fe1cc5a129cb71d8187e93</value>
+          </property>
+          <property>
+            <name>Auth token</name>
+          </property>
+          <property>
+            <name>From</name>
+            <value>+441908410751 </value>
+          </property>
+        </processor>
+        <processor>
+          <id>bfb081ec-8319-49bd-af9b-83dd6fb90c2e</id>
+          <name>Limit Messages per Person</name>
+          <position x="2554.9896163507774" y="833.5518220653844"/>
+          <styles/>
+          <comment/>
+          <class>org.apache.nifi.processors.standard.ControlRate</class>
+          <maxConcurrentTasks>1</maxConcurrentTasks>
+          <schedulingPeriod>0 sec</schedulingPeriod>
+          <penalizationPeriod>30 sec</penalizationPeriod>
+          <yieldPeriod>1 sec</yieldPeriod>
+          <bulletinLevel>WARN</bulletinLevel>
+          <lossTolerant>false</lossTolerant>
+          <scheduledState>RUNNING</scheduledState>
+          <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+          <runDurationNanos>0</runDurationNanos>
+          <property>
+            <name>Rate Control Criteria</name>
+            <value>flowfile count</value>
+          </property>
+          <property>
+            <name>Maximum Rate</name>
+            <value>3</value>
+          </property>
+          <property>
+            <name>Rate Controlled Attribute</name>
+          </property>
+          <property>
+            <name>Time Duration</name>
+            <value>5 min</value>
+          </property>
+          <property>
+            <name>Grouping Attribute</name>
+            <value>sms.to</value>
+          </property>
+          <autoTerminatedRelationship>failure</autoTerminatedRelationship>
+        </processor>
+        <processor>
+          <id>5e10da48-7f6e-4781-955d-3278de8a42c6</id>
+          <name>LogAttribute</name>
+          <position x="2025.9896881570394" y="1015.3662468293476"/>
+          <styles/>
+          <comment/>
+          <class>org.apache.nifi.processors.standard.LogAttribute</class>
+          <maxConcurrentTasks>1</maxConcurrentTasks>
+          <schedulingPeriod>0 sec</schedulingPeriod>
+          <penalizationPeriod>30 sec</penalizationPeriod>
+          <yieldPeriod>1 sec</yieldPeriod>
+          <bulletinLevel>WARN</bulletinLevel>
+          <lossTolerant>false</lossTolerant>
+          <scheduledState>RUNNING</scheduledState>
+          <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+          <runDurationNanos>0</runDurationNanos>
+          <property>
+            <name>Log Level</name>
+            <value>info</value>
+          </property>
+          <property>
+            <name>Log Payload</name>
+            <value>true</value>
+          </property>
+          <property>
+            <name>Attributes to Log</name>
+          </property>
+          <property>
+            <name>Attributes to Ignore</name>
+          </property>
+          <property>
+            <name>Log prefix</name>
+          </property>
+          <autoTerminatedRelationship>success</autoTerminatedRelationship>
+        </processor>
+        <processor>
+          <id>9a9a5a4f-4ed9-4b62-b0ac-eca65c546596</id>
+          <name>ControlRate</name>
+          <position x="3121.3756744851644" y="1018.4275261262226"/>
+          <styles/>
+          <comment/>
+          <class>org.apache.nifi.processors.standard.ControlRate</class>
+          <maxConcurrentTasks>1</maxConcurrentTasks>
+          <schedulingPeriod>0 sec</schedulingPeriod>
+          <penalizationPeriod>30 sec</penalizationPeriod>
+          <yieldPeriod>1 sec</yieldPeriod>
+          <bulletinLevel>WARN</bulletinLevel>
+          <lossTolerant>false</lossTolerant>
+          <scheduledState>RUNNING</scheduledState>
+          <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+          <runDurationNanos>0</runDurationNanos>
+          <property>
+            <name>Rate Control Criteria</name>
+            <value>flowfile count</value>
+          </property>
+          <property>
+            <name>Maximum Rate</name>
+            <value>1</value>
+          </property>
+          <property>
+            <name>Rate Controlled Attribute</name>
+          </property>
+          <property>
+            <name>Time Duration</name>
+            <value>15 min</value>
+          </property>
+          <property>
+            <name>Grouping Attribute</name>
+          </property>
+          <autoTerminatedRelationship>failure</autoTerminatedRelationship>
+        </processor>
+        <inputPort>
+          <id>40a2feb1-c0d0-4bba-b9b8-71b726a23a49</id>
+          <name>SMS</name>
+          <position x="2632.9896163507774" y="714.5518220653844"/>
+          <comments/>
+          <scheduledState>RUNNING</scheduledState>
+        </inputPort>
+        <connection>
+          <id>b77e188d-684e-422b-b218-9e3b02ec9e1a</id>
+          <name/>
+          <bendPoints/>
+          <labelIndex>1</labelIndex>
+          <zIndex>0</zIndex>
+          <sourceId>bfb081ec-8319-49bd-af9b-83dd6fb90c2e</sourceId>
+          <sourceGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</sourceGroupId>
+          <sourceType>PROCESSOR</sourceType>
+          <destinationId>c7dfac94-f7a7-46a6-9681-843322e48c89</destinationId>
+          <destinationGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</destinationGroupId>
+          <destinationType>PROCESSOR</destinationType>
+          <relationship>success</relationship>
+          <maxWorkQueueSize>0</maxWorkQueueSize>
+          <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+          <flowFileExpiration>0 sec</flowFileExpiration>
+        </connection>
+        <connection>
+          <id>4397c09d-c943-408a-a943-8fa15a514c51</id>
+          <name/>
+          <bendPoints/>
+          <labelIndex>1</labelIndex>
+          <zIndex>0</zIndex>
+          <sourceId>40a2feb1-c0d0-4bba-b9b8-71b726a23a49</sourceId>
+          <sourceGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</sourceGroupId>
+          <sourceType>INPUT_PORT</sourceType>
+          <destinationId>bfb081ec-8319-49bd-af9b-83dd6fb90c2e</destinationId>
+          <destinationGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</destinationGroupId>
+          <destinationType>PROCESSOR</destinationType>
+          <relationship/>
+          <maxWorkQueueSize>0</maxWorkQueueSize>
+          <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+          <flowFileExpiration>0 sec</flowFileExpiration>
+        </connection>
+        <connection>
+          <id>f617db64-9f30-4824-8bae-1e5ef84bffdf</id>
+          <name/>
+          <bendPoints/>
+          <labelIndex>1</labelIndex>
+          <zIndex>0</zIndex>
+          <sourceId>c7dfac94-f7a7-46a6-9681-843322e48c89</sourceId>
+          <sourceGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</sourceGroupId>
+          <sourceType>PROCESSOR</sourceType>
+          <destinationId>5e10da48-7f6e-4781-955d-3278de8a42c6</destinationId>
+          <destinationGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</destinationGroupId>
+          <destinationType>PROCESSOR</destinationType>
+          <relationship>success</relationship>
+          <maxWorkQueueSize>0</maxWorkQueueSize>
+          <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+          <flowFileExpiration>0 sec</flowFileExpiration>
+        </connection>
+        <connection>
+          <id>9f7c028e-7ef9-4a69-80f1-40fcb3fb4c54</id>
+          <name/>
+          <bendPoints>
+            <bendPoint x="3004.41845703125" y="1125.138427734375"/>
+          </bendPoints>
+          <labelIndex>1</labelIndex>
+          <zIndex>0</zIndex>
+          <sourceId>9a9a5a4f-4ed9-4b62-b0ac-eca65c546596</sourceId>
+          <sourceGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</sourceGroupId>
+          <sourceType>PROCESSOR</sourceType>
+          <destinationId>c7dfac94-f7a7-46a6-9681-843322e48c89</destinationId>
+          <destinationGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</destinationGroupId>
+          <destinationType>PROCESSOR</destinationType>
+          <relationship>success</relationship>
+          <maxWorkQueueSize>0</maxWorkQueueSize>
+          <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+          <flowFileExpiration>0 sec</flowFileExpiration>
+        </connection>
+        <connection>
+          <id>69128192-b6d1-49fa-a7e2-83550d5f095b</id>
+          <name/>
+          <bendPoints/>
+          <labelIndex>0</labelIndex>
+          <zIndex>0</zIndex>
+          <sourceId>c7dfac94-f7a7-46a6-9681-843322e48c89</sourceId>
+          <sourceGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</sourceGroupId>
+          <sourceType>PROCESSOR</sourceType>
+          <destinationId>9a9a5a4f-4ed9-4b62-b0ac-eca65c546596</destinationId>
+          <destinationGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</destinationGroupId>
+          <destinationType>PROCESSOR</destinationType>
+          <relationship>failure</relationship>
+          <maxWorkQueueSize>0</maxWorkQueueSize>
+          <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+          <flowFileExpiration>0 sec</flowFileExpiration>
+        </connection>
+      </processGroup>
+      <connection>
+        <id>11cddb4b-ae7d-4bdf-a572-a06adc4f3675</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>ddf6b028-225c-405d-a631-e568a0afe47d</sourceId>
+        <sourceGroupId>b868e750-fbae-46ce-bde4-037c86646032</sourceGroupId>
+        <sourceType>INPUT_PORT</sourceType>
+        <destinationId>40a2feb1-c0d0-4bba-b9b8-71b726a23a49</destinationId>
+        <destinationGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</destinationGroupId>
+        <destinationType>INPUT_PORT</destinationType>
+        <relationship/>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+      </connection>
+      <connection>
+        <id>f8eb35ac-db27-45e9-bc48-4af76aff80b1</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>90467436-d1b0-44db-b8c5-b415ef86fb2f</sourceId>
+        <sourceGroupId>9990ff0f-ac1e-49c9-be88-5422eacb57df</sourceGroupId>
+        <sourceType>OUTPUT_PORT</sourceType>
+        <destinationId>40a2feb1-c0d0-4bba-b9b8-71b726a23a49</destinationId>
+        <destinationGroupId>10d7f147-35ac-4e9c-bf0a-297fe3f1923e</destinationGroupId>
+        <destinationType>INPUT_PORT</destinationType>
+        <relationship/>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+      </connection>
+      <connection>
+        <id>ad6f1c0a-a23c-4d4b-afce-e605a1eccac2</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>870fdbb7-cd15-4e81-935a-b70006dd77ca</sourceId>
+        <sourceGroupId>b868e750-fbae-46ce-bde4-037c86646032</sourceGroupId>
+        <sourceType>INPUT_PORT</sourceType>
+        <destinationId>dda65409-688d-44c8-9c0c-b6567688498e</destinationId>
+        <destinationGroupId>9990ff0f-ac1e-49c9-be88-5422eacb57df</destinationGroupId>
+        <destinationType>INPUT_PORT</destinationType>
+        <relationship/>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+      </connection>
+      <connection>
+        <id>17339480-2a0e-4640-ba77-398657673d7d</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2b66606e-abbb-4eff-96f2-b29329c46718</sourceId>
+        <sourceGroupId>b868e750-fbae-46ce-bde4-037c86646032</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>2c7df614-ed27-462a-b326-2c538981d436</destinationId>
+        <destinationGroupId>b868e750-fbae-46ce-bde4-037c86646032</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+      </connection>
+      <connection>
+        <id>a1acf41d-b8be-4b67-b4d0-4cc1c0f8496b</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2c7df614-ed27-462a-b326-2c538981d436</sourceId>
+        <sourceGroupId>b868e750-fbae-46ce-bde4-037c86646032</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>82eae8ac-449f-4d5c-abb7-0204d96875aa</destinationId>
+        <destinationGroupId>b868e750-fbae-46ce-bde4-037c86646032</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+      </connection>
+      <connection>
+        <id>f0be1a20-ee37-4c70-938d-bcbafb71e94e</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>2b66606e-abbb-4eff-96f2-b29329c46718</sourceId>
+        <sourceGroupId>b868e750-fbae-46ce-bde4-037c86646032</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>b78f47a4-e9e3-4d7d-a637-f471fad21295</destinationId>
+        <destinationGroupId>b868e750-fbae-46ce-bde4-037c86646032</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+      </connection>
+    </processGroup>
+    <processGroup>
+      <id>f515efb5-1730-4b52-abcb-b3a9feb7f90e</id>
+      <name>Get settings file for destinations</name>
+      <position x="2142.986871425679" y="383.12322803595225"/>
+      <comment/>
+      <processor>
+        <id>27805b10-4ab3-43bb-84d3-bc78fa830a27</id>
+        <name>UpdateAttribute</name>
+        <position x="1176.6840903036841" y="1051.8524020995517"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.attributes.UpdateAttribute</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>0 sec</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Delete Attributes Expression</name>
+        </property>
+        <property>
+          <name>destination</name>
+          <value>${filename}</value>
+        </property>
+      </processor>
+      <processor>
+        <id>e0cd20b5-c66b-4cbf-9b3f-b8a12c477458</id>
+        <name>Get Settings file for destinations</name>
+        <position x="1174.6840802652337" y="876.8524267222788"/>
+        <styles/>
+        <comment/>
+        <class>org.apache.nifi.processors.standard.GetFile</class>
+        <maxConcurrentTasks>1</maxConcurrentTasks>
+        <schedulingPeriod>1 min</schedulingPeriod>
+        <penalizationPeriod>30 sec</penalizationPeriod>
+        <yieldPeriod>1 sec</yieldPeriod>
+        <bulletinLevel>WARN</bulletinLevel>
+        <lossTolerant>false</lossTolerant>
+        <scheduledState>RUNNING</scheduledState>
+        <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+        <runDurationNanos>0</runDurationNanos>
+        <property>
+          <name>Input Directory</name>
+          <value>./conf/destinations/</value>
+        </property>
+        <property>
+          <name>File Filter</name>
+          <value>[^\.].*</value>
+        </property>
+        <property>
+          <name>Path Filter</name>
+        </property>
+        <property>
+          <name>Batch Size</name>
+          <value>10</value>
+        </property>
+        <property>
+          <name>Keep Source File</name>
+          <value>false</value>
+        </property>
+        <property>
+          <name>Recurse Subdirectories</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>Polling Interval</name>
+          <value>0 sec</value>
+        </property>
+        <property>
+          <name>Ignore Hidden Files</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>Minimum File Age</name>
+          <value>0 sec</value>
+        </property>
+        <property>
+          <name>Maximum File Age</name>
+        </property>
+        <property>
+          <name>Minimum File Size</name>
+          <value>0 B</value>
+        </property>
+        <property>
+          <name>Maximum File Size</name>
+        </property>
+      </processor>
+      <outputPort>
+        <id>12bdaa31-b53d-402e-99af-0be6a746c9e6</id>
+        <name>settings</name>
+        <position x="1249.6840903036841" y="1226.8524020995517"/>
+        <comments/>
+        <scheduledState>RUNNING</scheduledState>
+      </outputPort>
+      <connection>
+        <id>2df4f05a-0318-40dd-9caa-7e64ea9cdb6e</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>e0cd20b5-c66b-4cbf-9b3f-b8a12c477458</sourceId>
+        <sourceGroupId>f515efb5-1730-4b52-abcb-b3a9feb7f90e</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>27805b10-4ab3-43bb-84d3-bc78fa830a27</destinationId>
+        <destinationGroupId>f515efb5-1730-4b52-abcb-b3a9feb7f90e</destinationGroupId>
+        <destinationType>PROCESSOR</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+      </connection>
+      <connection>
+        <id>c7499fe8-5aa2-4dda-b9f3-c06f04e56d51</id>
+        <name/>
+        <bendPoints/>
+        <labelIndex>1</labelIndex>
+        <zIndex>0</zIndex>
+        <sourceId>27805b10-4ab3-43bb-84d3-bc78fa830a27</sourceId>
+        <sourceGroupId>f515efb5-1730-4b52-abcb-b3a9feb7f90e</sourceGroupId>
+        <sourceType>PROCESSOR</sourceType>
+        <destinationId>12bdaa31-b53d-402e-99af-0be6a746c9e6</destinationId>
+        <destinationGroupId>f515efb5-1730-4b52-abcb-b3a9feb7f90e</destinationGroupId>
+        <destinationType>OUTPUT_PORT</destinationType>
+        <relationship>success</relationship>
+        <maxWorkQueueSize>0</maxWorkQueueSize>
+        <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+        <flowFileExpiration>0 sec</flowFileExpiration>
+      </connection>
+    </processGroup>
+    <connection>
+      <id>3b57e6bd-69fc-47fc-b2eb-1a1f18eb47da</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>d9f85081-48f1-4abd-bbba-e86acd964a3f</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>PROCESSOR</sourceType>
+      <destinationId>275716dd-7e2c-4d74-a7ce-b2aa147897c1</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>OUTPUT_PORT</destinationType>
+      <relationship>success</relationship>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>3d41cea7-e40e-4b4e-ac9d-a9180754b617</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>0</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>0943337a-78e0-4e53-92b3-678eb6db9268</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>INPUT_PORT</sourceType>
+      <destinationId>3e37f20f-8bda-4e83-afeb-0a446f1b4fb3</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>FUNNEL</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>31e55ad1-8e33-44cf-b8d3-0fbfb7fc5ed9</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>35fd994b-4950-4f13-8b24-8469f417329b</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>INPUT_PORT</sourceType>
+      <destinationId>0d3f6be1-2771-49a1-aa57-3b1eee3d3d19</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>FUNNEL</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>2b58082c-a781-4840-aa28-411f5953cd25</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>0</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>b79e6c1b-fb5b-4cc3-a0ea-17c39754d480</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>PROCESSOR</sourceType>
+      <destinationId>33bf6177-3442-4a67-a15f-d693429db1ea</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>FUNNEL</destinationType>
+      <relationship>success</relationship>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>c75c594d-7dd4-4951-9549-0bab2c42e306</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>def0e7a1-5d2d-4e53-bda0-f4ecf3ad5b9b</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>INPUT_PORT</sourceType>
+      <destinationId>d9f85081-48f1-4abd-bbba-e86acd964a3f</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>PROCESSOR</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>ac0a0868-bd95-4079-8669-5bd211a7fe4b</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>def0e7a1-5d2d-4e53-bda0-f4ecf3ad5b9b</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>INPUT_PORT</sourceType>
+      <destinationId>0d3f6be1-2771-49a1-aa57-3b1eee3d3d19</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>FUNNEL</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>3cdd2e09-6668-405a-b80f-6527a2dc267b</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>0</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>318ecbb6-7072-43e4-83f0-74cfeb16501a</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>PROCESSOR</sourceType>
+      <destinationId>3e37f20f-8bda-4e83-afeb-0a446f1b4fb3</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>FUNNEL</destinationType>
+      <relationship>success</relationship>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>936643e9-91bb-40f7-bab6-da560dc8cb53</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>da67c7e3-e965-40c1-8156-6941a227de01</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>INPUT_PORT</sourceType>
+      <destinationId>b79e6c1b-fb5b-4cc3-a0ea-17c39754d480</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>PROCESSOR</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>f440740d-c838-49b9-90d3-39239fe2e0f5</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>0d3f6be1-2771-49a1-aa57-3b1eee3d3d19</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>FUNNEL</sourceType>
+      <destinationId>5b09e6d2-6a47-493e-81a0-0042e5491538</destinationId>
+      <destinationGroupId>92f1f015-8657-4e5e-a119-4afe9d74dd6a</destinationGroupId>
+      <destinationType>INPUT_PORT</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>1 hour</flowFileExpiration>
+      <queuePrioritizerClass>org.apache.nifi.prioritizer.NewestFlowFileFirstPrioritizer</queuePrioritizerClass>
+    </connection>
+    <connection>
+      <id>6bcafb1d-1cd7-4fcd-8877-67441a8b9f9f</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>3e37f20f-8bda-4e83-afeb-0a446f1b4fb3</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>FUNNEL</sourceType>
+      <destinationId>ff94f7d2-6504-4f05-8874-019ff86ed3be</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>PROCESSOR</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>d2989eca-b313-4209-8ff2-636d55e64a72</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>33bf6177-3442-4a67-a15f-d693429db1ea</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>FUNNEL</sourceType>
+      <destinationId>5b2a4959-c064-4278-8f41-076be8673df7</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>OUTPUT_PORT</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+      <queuePrioritizerClass>org.apache.nifi.prioritizer.PriorityAttributePrioritizer</queuePrioritizerClass>
+    </connection>
+    <connection>
+      <id>972db8b8-c2f7-48cd-b56d-63ed43d9cccd</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>35fd994b-4950-4f13-8b24-8469f417329b</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>INPUT_PORT</sourceType>
+      <destinationId>8c37e2cd-ee9b-44e3-a60b-ec17a2306393</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>OUTPUT_PORT</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>fb9f4f31-bc35-494f-95bc-cbe5b6b24391</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>12bdaa31-b53d-402e-99af-0be6a746c9e6</sourceId>
+      <sourceGroupId>f515efb5-1730-4b52-abcb-b3a9feb7f90e</sourceGroupId>
+      <sourceType>OUTPUT_PORT</sourceType>
+      <destinationId>df9e4666-634c-4fa2-b673-a16acc595bc4</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>OUTPUT_PORT</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>a633a886-4e1d-4fc2-8242-adcfe43a078c</id>
+      <name>Back Pressure on Devices</name>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>def0e7a1-5d2d-4e53-bda0-f4ecf3ad5b9b</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>INPUT_PORT</sourceType>
+      <destinationId>500fc7ba-6b4f-4c6d-b9be-b746cc6a4ffc</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>OUTPUT_PORT</destinationType>
+      <relationship/>
+      <maxWorkQueueSize>100000</maxWorkQueueSize>
+      <maxWorkQueueDataSize>256 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+      <queuePrioritizerClass>org.apache.nifi.prioritizer.NewestFlowFileFirstPrioritizer</queuePrioritizerClass>
+    </connection>
+    <connection>
+      <id>2e60fc99-cd0e-4a8e-a034-2844107b65f9</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>0</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>2f36d2ea-ff03-41b3-aa33-de66427836d8</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>PROCESSOR</sourceType>
+      <destinationId>3e37f20f-8bda-4e83-afeb-0a446f1b4fb3</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>FUNNEL</destinationType>
+      <relationship>success</relationship>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>bef4e6a3-9ee5-46d9-83b4-3bab85bd23d1</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>ff94f7d2-6504-4f05-8874-019ff86ed3be</sourceId>
+      <sourceGroupId>3042b954-defa-483f-b6e0-271a695d7f22</sourceGroupId>
+      <sourceType>PROCESSOR</sourceType>
+      <destinationId>33bf6177-3442-4a67-a15f-d693429db1ea</destinationId>
+      <destinationGroupId>3042b954-defa-483f-b6e0-271a695d7f22</destinationGroupId>
+      <destinationType>FUNNEL</destinationType>
+      <relationship>success</relationship>
+      <maxWorkQueueSize>0</maxWorkQueueSize>
+      <maxWorkQueueDataSize>0 MB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+  </rootGroup>
+  <controllerServices>
+    <controllerService>
+      <id>a0156731-3c8d-4ab9-836c-e4fc90c4840e</id>
+      <name>OAuthTokenDistributedMapCacheServer</name>
+      <comment/>
+      <class>org.apache.nifi.distributed.cache.server.map.DistributedMapCacheServer</class>
+      <enabled>true</enabled>
+      <property>
+        <name>Port</name>
+        <value>4558</value>
+      </property>
+      <property>
+        <name>Maximum Cache Entries</name>
+        <value>10000</value>
+      </property>
+      <property>
+        <name>Eviction Strategy</name>
+        <value>Least Frequently Used</value>
+      </property>
+      <property>
+        <name>Persistence Directory</name>
+        <value>/tmp/oauth</value>
+      </property>
+      <property>
+        <name>SSL Context Service</name>
+        <value>d1cedd00-02d3-41ba-a592-006eaecdefae</value>
+      </property>
+    </controllerService>
+    <controllerService>
+      <id>453ffe0e-33d8-4d8a-951c-5f014b745411</id>
+      <name>OAuthStandardHttpContextMap</name>
+      <comment/>
+      <class>org.apache.nifi.http.StandardHttpContextMap</class>
+      <enabled>true</enabled>
+      <property>
+        <name>Maximum Outstanding Requests</name>
+        <value>5000</value>
+      </property>
+      <property>
+        <name>Request Expiration</name>
+        <value>1 min</value>
+      </property>
+    </controllerService>
+    <controllerService>
+      <id>7f4b0c6c-879d-46b5-a09e-f460ec3891fa</id>
+      <name>AddressBookService</name>
+      <comment/>
+      <class>org.apache.nifi.distributed.cache.client.DistributedMapCacheClientService</class>
+      <enabled>true</enabled>
+      <property>
+        <name>Server Hostname</name>
+        <value>cloud.things.simonellistonball.com</value>
+      </property>
+      <property>
+        <name>Server Port</name>
+        <value>4557</value>
+      </property>
+      <property>
+        <name>SSL Context Service</name>
+        <value>d1cedd00-02d3-41ba-a592-006eaecdefae</value>
+      </property>
+      <property>
+        <name>Communications Timeout</name>
+        <value>30 secs</value>
+      </property>
+    </controllerService>
+    <controllerService>
+      <id>ec551183-f31d-4ff0-b356-cbc5d3ffe7a5</id>
+      <name>StandardHttpContextMap</name>
+      <comment/>
+      <class>org.apache.nifi.http.StandardHttpContextMap</class>
+      <enabled>true</enabled>
+      <property>
+        <name>Maximum Outstanding Requests</name>
+        <value>5000</value>
+      </property>
+      <property>
+        <name>Request Expiration</name>
+        <value>1 min</value>
+      </property>
+    </controllerService>
+    <controllerService>
+      <id>d1cedd00-02d3-41ba-a592-006eaecdefae</id>
+      <name>StandardSSLContextService</name>
+      <comment/>
+      <class>org.apache.nifi.ssl.StandardSSLContextService</class>
+      <enabled>true</enabled>
+      <property>
+        <name>Keystore Filename</name>
+        <value>/opt/certs/keystore.jks</value>
+      </property>
+      <property>
+        <name>Keystore Password</name>
+        <value></value>
+      </property>
+      <property>
+        <name>Keystore Type</name>
+        <value>JKS</value>
+      </property>
+      <property>
+        <name>Truststore Filename</name>
+        <value>/opt/certs/truststore.jks</value>
+      </property>
+      <property>
+        <name>Truststore Password</name>
+        <value></value>
+      </property>
+      <property>
+        <name>Truststore Type</name>
+        <value>JKS</value>
+      </property>
+      <property>
+        <name>SSL Protocol</name>
+        <value>TLSv1.2</value>
+      </property>
+    </controllerService>
+    <controllerService>
+      <id>45c448e9-afcd-4033-8019-0cb10ec161b2</id>
+      <name>AddressBookClient</name>
+      <comment/>
+      <class>org.apache.nifi.distributed.cache.client.DistributedMapCacheClientService</class>
+      <enabled>true</enabled>
+      <property>
+        <name>Server Hostname</name>
+        <value>cloud.things.simonellistonball.com</value>
+      </property>
+      <property>
+        <name>Server Port</name>
+        <value>4557</value>
+      </property>
+      <property>
+        <name>SSL Context Service</name>
+        <value>d1cedd00-02d3-41ba-a592-006eaecdefae</value>
+      </property>
+      <property>
+        <name>Communications Timeout</name>
+        <value>30 secs</value>
+      </property>
+    </controllerService>
+    <controllerService>
+      <id>22c91e6d-de94-4734-92bc-4e115d127553</id>
+      <name>OAuthTokenDistributedMapCacheClientService</name>
+      <comment/>
+      <class>org.apache.nifi.distributed.cache.client.DistributedMapCacheClientService</class>
+      <enabled>true</enabled>
+      <property>
+        <name>Server Hostname</name>
+        <value>localhost</value>
+      </property>
+      <property>
+        <name>Server Port</name>
+        <value>4558</value>
+      </property>
+      <property>
+        <name>SSL Context Service</name>
+        <value>d1cedd00-02d3-41ba-a592-006eaecdefae</value>
+      </property>
+      <property>
+        <name>Communications Timeout</name>
+        <value>30 secs</value>
+      </property>
+    </controllerService>
+    <controllerService>
+      <id>ed184387-80c2-46a3-8683-287f119da768</id>
+      <name>ClientSSLContext</name>
+      <comment/>
+      <class>org.apache.nifi.ssl.StandardSSLContextService</class>
+      <enabled>true</enabled>
+      <property>
+        <name>Keystore Filename</name>
+      </property>
+      <property>
+        <name>Keystore Password</name>
+      </property>
+      <property>
+        <name>Keystore Type</name>
+      </property>
+      <property>
+        <name>Truststore Filename</name>
+        <value>/opt/certs/client.truststore.jks</value>
+      </property>
+      <property>
+        <name>Truststore Password</name>
+        <value></value>
+      </property>
+      <property>
+        <name>Truststore Type</name>
+        <value>JKS</value>
+      </property>
+      <property>
+        <name>SSL Protocol</name>
+        <value>TLS</value>
+      </property>
+    </controllerService>
+  </controllerServices>
+  <reportingTasks/>
+</flowController>

@@ -65,7 +65,10 @@ ${keytool} -importkeystore \
         -deststorepass $keystorePasswd -destkeypass $keyPasswd -destkeystore $REQPATH/${NAME}.server.keystore.jks \
         -srckeystore $REQPATH/${NAME}.server.p12 -srcstoretype PKCS12 -srcstorepass $PASSWORD \
         -alias ${NAME}${DNS}
+echo "Import CA"
 ${keytool} -import -alias CAcert -storepass $keystorePasswd -file CA/cacert.pem -keystore $REQPATH/${NAME}.server.keystore.jks
+echo "Add client"
+${keytool} -import -alias ${NAME}Client -storepass $keystorePasswd -file $REQPATH/${NAME}.client.crt -keystore $REQPATH/${NAME}.server.keystore.jks
 
 # create truststore
 echo "Import Truststore"

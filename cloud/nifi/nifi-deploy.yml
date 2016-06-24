@@ -1,0 +1,44 @@
+nifi:
+  url: https://104.45.226.124:8443
+
+  # when making changes via API, need a unique client ID, can be anything
+  clientId: PiWiNiFi
+
+  # Where to fetch the actual template XML data from
+  # Escape complex URLs with quotes
+  templateUri: "file:///Users/sball/Documents/PiWiNiFi/cloud/nifi/PiWiNiFi_Cloud_Flow.xml"
+
+  # Tell NiFi we want some things removed to make way for this (re-) deployment
+  undeploy:
+
+    # Names of controller services to remove. Ignores any missing ones
+    controllerServices:
+      - StandardSSLContextService
+
+    # Names of process groups to remove. These are in your template
+    processGroups: ~
+
+    # Template names to remove. Because we're updating with a new version
+    templates:
+      - PiWiNiFi Cloud Flow
+
+# Instantiate these controller services, our template uses them
+controllerServices:
+  StandardSSLContextService:
+    state: ENABLED
+    config:
+      Keystore Filename: /opt/certs/keystore.jks
+      Keystore Password: 87~J#8JR81D#SD~?_uJ8%qL)KbgJ06oS
+      Keystore Type: JKS
+      Truststore Filename: /opt/certs/truststore.jks
+      Truststore Password: HW(uyIOrq3AD8xK_7*W)ESD0q9?Ym9fq
+      Truststore Type: JKS
+      SSL Protocol: TLSv1.2
+
+# Processors belong to process groups.
+# This way random ones won't be picked up (unlike a search api,
+# which returns every occurence)
+processGroups:
+
+  # Empty in this case, as our template puts everything in a group
+  root: ~

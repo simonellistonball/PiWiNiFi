@@ -19,8 +19,17 @@ cp ca-passwd ../cloud/provisioner/data/
 for server in secloud cloud booth
 do
   rm -rf ../$server/nifi/certs/
-  mkdir ../$server/nifi/certs/ 
+  mkdir ../$server/nifi/certs/
+  cp certs/$server/$server.client.keystore.jks ../$server/nifi/certs/client.keystore.jks
   cp certs/$server/$server.server.keystore.jks ../$server/nifi/certs/keystore.jks
   cp certs/$server/$server.truststore.jks ../$server/nifi/certs/truststore.jks
   cat certs/$server/pass-* | sed 's/: /=/' > ../$server/nifi/certs/passwd
+done
+
+for server in piwinifi1 piwinifi2 piwinifi3
+do
+  mkdir -p ../secloud/nifi/certs/
+  cp certs/$server/$server.server.keystore.jks ../secloud/nifi/certs/$server.keystore.jks
+  cp certs/$server/$server.truststore.jks ../secloud/nifi/certs/$server.truststore.jks
+  cat certs/$server/pass-* | sed 's/: /=/' > ../secloud/nifi/certs/$server.passwd
 done

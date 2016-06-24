@@ -12,7 +12,7 @@ RUN             mkdir -p /opt/nifi && \
 
 # Expose web port
 EXPOSE          8443-8448
-VOLUME          ["/opt/certs", "${NIFI_HOME}/custom", "${NIFI_HOME}/flowfile_repository", "${NIFI_HOME}/database_repository", "${NIFI_HOME}/content_repository", "${NIFI_HOME}/provenance_repository"]
+VOLUME          ["/opt/certs", "${NIFI_HOME}/conf", "${NIFI_HOME}/custom", "${NIFI_HOME}/flowfile_repository", "${NIFI_HOME}/database_repository", "${NIFI_HOME}/content_repository", "${NIFI_HOME}/provenance_repository"]
 
 ADD             ./sh/ /opt/sh
 RUN             chmod a+x /opt/sh/start.sh
