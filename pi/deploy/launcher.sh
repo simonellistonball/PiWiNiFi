@@ -57,15 +57,15 @@ sed -i -- "s/MYSSID/$MYSSID/g" /etc/network/interfaces
 sed -i -- "s/MYPSK/$MYPSK/g" /etc/network/interfaces
 service networking restart
 
-if [ -d /sys/class/net/wlan1 ]; then
+if [ -d /sys/class/net/${MONDEV} ]; then
     log "Downing monitoring device ${MONDEV}"
     ifconfig ${MONDEV} down
-    while ! grep -q "down" /sys/class/net/wlan1/operstate; do
+    while ! grep -q "down" /sys/class/net/${MONDEV}/operstate; do
         sleep 1
     done
     log "Enabling monitoring mode on ${MONDEV}"
-    while ! $( iwconfig wlan1 | grep -q "Monitor" ); do 
-        iwconfig ${MONDEV} mode monitor 
+    while ! $( iwconfig ${MONDEV} | grep -q "Monitor" ); do
+        iwconfig ${MONDEV} mode monitor
         sleep 5
     done
     log "Bringing up ${MONDEV}"
@@ -143,7 +143,7 @@ if [ -s /tmp/overlayunpack ]; then
     # Start Nifi
     log "Starting nifi"
     /opt/nifi/bin/nifi.sh start
-    
+
     # Running Python senseHat script
     if grep -q "Sense HAT" "/proc/device-tree/hat/product"
     then
@@ -152,7 +152,7 @@ if [ -s /tmp/overlayunpack ]; then
     else
      log "Sense Hat not detected, skipping sensehat.py"
     fi
-    
+
     # Running Python wifiMon script
     # Needs to run as root to access raw packet information (easiest solution).
     # Much more efficient than Airodump, use if you can
