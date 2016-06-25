@@ -7,6 +7,7 @@ realpath() {
 
 NIFI_HOME=/opt/nifi
 docker run -d -it \
+  -l provisioner \
   -p 443:443 \
   -v $(realpath ./data):/data \
   -v $(realpath ./certs):/etc/nginx/certs/:ro \

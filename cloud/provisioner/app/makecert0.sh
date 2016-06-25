@@ -5,16 +5,14 @@ location=/data/keys/$NAME
 
 rm -rf $location
 mkdir -p $location
-cd $location
 
-ca=/data/ca
-ca-passwd=/data/ca-passwd
+ca=/data/CA
 DAYS=30
 KEYLEN=2048
 
 keytool="/usr/local/java/jdk1.8.0_91/bin/keytool -noprompt"
 DNS=$2.things.simonellistonball.com
-ORG='/C=US/ST=California/L=Santa Clara/O=Hortonworks/OU=PiWiNiFi Demo'
+ORG='/C=US/ST=California/O=Hortonworks/OU=PiWiNiFi Demo'
 
 # build the trust and keystore files for each server
 truststorePasswd=$3
@@ -40,7 +38,7 @@ openssl genrsa -aes256 -passout pass:$PASSWORD -out $location/${NAME}.server.key
 log "Generate server CSR"
 openssl req -new -key $location/${NAME}.server.key -out $location/${NAME}.server.csr -passin pass:$PASSWORD -subj "${ORG}/CN=${NAME}${DNS}"
 log "Signing server certificate"
-openssl ca -batch -config openssl.conf -passin file:${ca-passwd} -out $location/${NAME}.server.crt -infiles $location/${NAME}.server.csr
+openssl ca -batch -config /data/openssl.conf -passin file:/data/ca-passwd -out $location/${NAME}.server.crt -infiles $location/${NAME}.server.csr
 
 # client keys for provisioning
 log "Generate client key"
@@ -49,13 +47,13 @@ log "Generate client CSR"
 openssl req -new -key $location/${NAME}.client.key -out $location/${NAME}.client.csr -passin pass:$CLI_PASSWORD -subj "${ORG}/CN=${NAME}Client"
 # And sign them
 log "Signing client certificate"
-openssl ca -batch -config openssl.conf -passin file:${ca-passwd} -out $location/${NAME}.client.crt -infiles $location/${NAME}.client.csr
+openssl ca -batch -config /data/openssl.conf -passin file:/data/ca-passwd -out $location/${NAME}.client.crt -infiles $location/${NAME}.client.csr
 
 # create server keystore
 ${keytool} -import -alias ${NAME}${DNS} -storepass $keystorePasswd -file $location/${NAME}.server.crt -keystore $location/${NAME}.server.keystore.jks
 
 # create truststore
-${keytool} -import -alias CAcert -storepass $truststorePasswd -file CA/cacert.pem -keystore $location/${NAME}.truststore.jks
+${keytool} -import -alias CAcert -storepass $truststorePasswd -file /data/CA/cacert.pem -keystore $location/${NAME}.truststore.jks
 
 # create client keystore
 ${keytool} -import -alias ${NAME}Client -storepass $keystorePasswd -file $location/${NAME}.client.crt -keystore $location/${NAME}.client.keystore.jks

@@ -125,9 +125,9 @@ def get_entry(mac):
     put_to_file(b64decode(entry['clientKeystore']), d+'/client.keystore.jks')
 
     # Add in config template overlay
-    for root, dirnames, filenames in os.walk('/data/configs'):
+    for root, dirnames, filenames in os.walk('/data/overlay'):
         for filename in filenames:
-            copyfile(os.path.join(root, filename), os.path.join(d,root[len('/data/configs/'):],filename))
+            copyfile(os.path.join(root, filename), os.path.join(d,root[len('/data/overlay/'):],filename))
 
     def reset(tarinfo):
         tarinfo.uid = tarinfo.gid = 0

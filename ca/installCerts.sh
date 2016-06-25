@@ -14,6 +14,8 @@ chmod 700 ../cloud/provisioner/data/ca-passwd
 rm -rf ../cloud/provisioner/data/CA/
 cp -R CA ../cloud/provisioner/data/CA/
 cp ca-passwd ../cloud/provisioner/data/
+cp openssl.conf ../cloud/provisioner/data/
+sed -i '' -e 's|dir = CA|dir = /data/CA|' ../cloud/provisioner/data/openssl.conf
 
 # Trust and Key Stores for the NiFis
 for server in secloud cloud booth
@@ -33,3 +35,8 @@ do
   cp certs/$server/$server.truststore.jks ../secloud/nifi/certs/$server.truststore.jks
   cat certs/$server/pass-* | sed 's/: /=/' > ../secloud/nifi/certs/$server.passwd
 done
+
+# add pi certs
+cp CA/cacert.pem ../pi/deploy/ca.crt
+openssl rsa -in certs/cloud/cloud.client.key -passin file:certs/cloud/cloud-client-passwd -out ../pi/deploy/client.key
+cp certs/cloud/cloud.client.crt ../pi/deploy/client.crt
