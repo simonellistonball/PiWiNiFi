@@ -132,7 +132,7 @@ else
     # Forcing unpack to specific dir incase overlay contains odd dir structure
     mkdir -p /tmp/overlayunpack && tar -zxvf /tmp/overlay -C /tmp/overlayunpack/ --warning=no-timestamp
     log "Running overlay deployment script"
-    . /tmp/overlayunpack/rpiCode/overlay.sh
+    . /tmp/overlayunpack/pi/deploy/overlay.sh
 fi
 
 log "Setting hostname ..."
