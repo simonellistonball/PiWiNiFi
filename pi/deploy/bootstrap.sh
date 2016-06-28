@@ -72,8 +72,8 @@ if [ $(stat -c %Y /var/cache/apt/) -lt $(date +%s -d "2 days ago") ]; then
     log "Running OS update/upgrade/firmware update..."
     apt-key update
     apt-get update -y
-#    apt-get upgrade -y
-#    rpi-update
+    apt-get upgrade -y
+    rpi-update
     apt-get autoremove -y
 else 
     log "OS update run recently, skipping..."
@@ -81,7 +81,10 @@ fi
 
 # Install dependencies
 log "Checking software dependencies..."
-apt-get -y --fix-missing install ipython libssl-dev python-dev tcpdump python-scapy ethtool python-netaddr libffi-dev libjpeg8-dev ca-certificates bluez bluetooth blueman
+apt-get -y --fix-missing install ipython libssl-dev python-dev tcpdump python-scapy ethtool python-netaddr libffi-dev libjpeg8-dev ca-certificates bluez bluetooth blueman oracle-java8-jdk python-numpy python-netaddr git
+# Need to install Pip separately when using Raspbian-lite
+curl -O https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
 
 # Set environment variables
 if [ ! -s /etc/profile.d/piwinifi.sh ]; then
@@ -132,7 +135,8 @@ else
     # Forcing unpack to specific dir incase overlay contains odd dir structure
     mkdir -p /tmp/overlayunpack && tar -zxvf /tmp/overlay -C /tmp/overlayunpack/ --warning=no-timestamp
     log "Running overlay deployment script"
-    . /tmp/overlayunpack/pi/deploy/overlay.sh
+    chmod +x ./overlay.sh
+    ./overlay.sh
 fi
 
 log "Setting hostname ..."
