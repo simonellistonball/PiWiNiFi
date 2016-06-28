@@ -13,7 +13,7 @@ iface eth0 inet manual
 
 allow-hotplug CONDEV
 iface CONDEV inet dhcp
-wpa-ap-scan 1
+wpa-ap-scan 2
 wpa-scan-ssid 2       # Change to 1 for SSID security, 2 for No SSID security
 wpa-ssid "MYSSID"
 # wpa-psk "MYPSK"    # Uncomment if using SSID security

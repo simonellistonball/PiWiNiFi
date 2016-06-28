@@ -68,16 +68,16 @@ chmod 0444 ./nifi.tar.gz
 ###
 
 ### OS Update if not run recently
-if [ $(stat -c %Y /var/cache/apt/) -lt $(date +%s -d "2 days ago") ]; then
+# if [ $(stat -c %Y /var/cache/apt/) -lt $(date +%s -d "2 days ago") ]; then
     log "Running OS update/upgrade/firmware update..."
     apt-key update
     apt-get update -y
     apt-get upgrade -y
     rpi-update
     apt-get autoremove -y
-else 
-    log "OS update run recently, skipping..."
-fi
+#else 
+#    log "OS update run recently, skipping..."
+#fi
 
 # Install dependencies
 log "Checking software dependencies..."
