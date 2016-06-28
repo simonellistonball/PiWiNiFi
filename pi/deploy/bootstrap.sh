@@ -26,6 +26,8 @@ log "Setting Timezone..."
 echo "$TIMEZONE" > /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
 
+# We need this for initial installs
+apt-get -y install ethtool
 
 ## Detecting environment state ######################
 
@@ -66,20 +68,20 @@ chmod 0444 ./nifi.tar.gz
 ###
 
 ### OS Update if not run recently
-if [ $(stat -c %Y /var/cache/apt/) -lt $(date +%s -d "2 days ago") ]; then
-   log "Running OS update/upgrade/firmware update..."
-   apt-key update
-   apt-get update -y
-   apt-get upgrade -y
-   rpi-update
-   apt-get autoremove -y
-else 
-   log "OS update run recently, skipping..."
-fi
+# if [ $(stat -c %Y /var/cache/apt/) -lt $(date +%s -d "2 days ago") ]; then
+#    log "Running OS update/upgrade/firmware update..."
+#    apt-key update
+#    apt-get update -y
+#    apt-get upgrade -y
+#    rpi-update
+#    apt-get autoremove -y
+# else 
+#    log "OS update run recently, skipping..."
+# fi
 
 # Install dependencies
 log "Checking software dependencies..."
-apt-get -y install ipython libssl-dev python-dev tcpdump python-scapy ethtool python-netaddr libffi-dev libjpeg8-dev ca-certificates bluez bluetooth blueman
+apt-get -y --fix-missing install ipython libssl-dev python-dev tcpdump python-scapy ethtool python-netaddr libffi-dev libjpeg8-dev ca-certificates bluez bluetooth blueman
 
 # Set environment variables
 if [ ! -s /etc/profile.d/piwinifi.sh ]; then
