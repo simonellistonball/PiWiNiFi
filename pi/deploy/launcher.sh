@@ -24,7 +24,7 @@ logsetup
 log "PiWiNiFi Launcher script invoked at $(date)"
 
 NEED_REBOOT=false
-source deploy.cfg
+source /opt/pi/deploy/deploy.cfg
 
 ## Detecting environment state ######################
 
@@ -49,7 +49,7 @@ log "Using hardware device $MONDEV for monitoring, and probably $CONDEV for netw
 log "Setting up Wifi adapters"
 
 # Copy template interfaces file
-cp /home/pi/deploy/interfaces.txt /etc/network/interfaces
+cp /opt/pi/deploy/interfaces.txt /etc/network/interfaces
 # Modify parameters
 sed -i -- "s/CONDEV/$CONDEV/g" /etc/network/interfaces
 sed -i -- "s/MONDEV/$MONDEV/g" /etc/network/interfaces

@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
+## Logging
+# http://mostlyunixish.franzoni.eu/blog/2013/10/08/quick-log-for-bash-scripts/
+
+LOGFILE=/var/log/piwinifi_overlay.log
+MAX_LOG_LINES=200
+
+function logsetup {
+    TMP=$(tail -n $MAX_LOG_LINES $LOGFILE 2>/dev/null) && echo "${TMP}" > ${LOGFILE}
+    exec > >(tee -a ${LOGFILE})
+    exec 2>&1
+}
+
+function log {
+    echo "[$(date)]:[PiWiNiFi] $*"
+}
+
+logsetup
 log "PiWiNiFi overlay script invoked at $(date)"
 
 log "Deploying overlay into paths"
