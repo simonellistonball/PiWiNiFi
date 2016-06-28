@@ -1,0 +1,439 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01-preview/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "prefix": {
+      "metadata": {
+        "description": "Unique prefix used for all resource naming"
+      },
+      "type": "string"
+    },
+    "nifiCount": {
+      "maxValue": 3,
+      "metadata": {
+        "description": "Number of nifi instances (3 or less)."
+      },
+      "type": "int"
+    },
+    "slaveCount": {
+      "maxValue": 100,
+      "metadata": {
+        "description": "Number of slave instances (3 or less)."
+      },
+      "type": "int"
+    },
+    "masterCount": {
+      "maxValue": 3,
+      "metadata": {
+        "description": "Number of master instances (3 or less)."
+      },
+      "type": "int"
+    },
+    "solrCount": {
+      "maxValue": 3,
+      "metadata": {
+        "description": "Number of solr instances (3 or less)."
+      },
+      "type": "int"
+    },
+    "slaveSku": {
+      "type": "string",
+      "defaultValue": "Standard_D14",
+      "metadata": {
+        "description": "Size of VMs in the VM Scale Set."
+      }
+    },
+    "nifiSku": {
+      "type": "string",
+      "defaultValue": "Standard_F8",
+      "metadata": {
+        "description": "Size of VMs in the Nifi Scale Set."
+      }
+    },
+    "solrSku": {
+      "type": "string",
+      "defaultValue": "Standard_D13",
+      "metadata": {
+        "description": "Size of VMs in the Solr Scale Set."
+      }
+    },
+    "masterSku": {
+      "type": "string",
+      "defaultValue": "Standard_D13",
+      "metadata": {
+        "description": "Size of VMs in the Master Scale Set."
+      }
+    },
+    "gatewaySku": {
+      "type": "string",
+      "defaultValue": "Standard_D13",
+      "metadata": {
+        "description": "Size of VMs in the Gateway Scale Set."
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Admin username on all VMs."
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Admin password on all VMs."
+      }
+    },
+    "sshKeyData": {
+      "type": "string",
+      "metadata": {
+        "description": "SSH rsa public key file as a string."
+      }
+    },
+    "prefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Unique prefix used for all resource naming"
+      }
+    }
+  },
+  "variables": {
+    "infrastructureGroup": "hadoopInfrastructure",
+    "prefix": "[parameters('prefix')]",
+    "sizeOfEachDataDiskInGB": 50,
+    "apiVersion": "2015-06-15",
+    "osType": {
+      "publisher": "Openlogic",
+      "offer": "CentOS",
+      "sku": "7.2",
+      "version": "latest"
+    },
+    "imageReference": {
+      "publisher": "Openlogic",
+      "offer": "CentOS",
+      "sku": "7.2",
+      "version": "latest"
+    },
+    "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
+    "sshConfig": {
+      "disablePasswordAuthentication": "true",
+      "ssh": {
+        "publicKeys": [{
+          "path": "[variables('sshKeyPath')]",
+          "keyData": "[parameters('sshKeyData')]"
+        }]
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(parameters('prefix'), 'gateway')]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('apiVersion')]",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('gatewaySku')]"
+        },
+        "osProfile": {
+          "computerName": "gateway",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "linuxConfiguration": "[variables('sshConfig')]"
+        },
+        "storageProfile": {
+          "imageReference": "[variables('imageReference')]",
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat(variables('prefix'), 'sa')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [{
+            "id": "[resourceId(variables('infrastructureGroup'), 'Microsoft.Network/networkInterfaces/', concat(variables('prefix'), 'gateway', 'ipconfigNetworkPublic'))]",
+            "properties": {
+              "primary": true
+            }
+          }]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "true",
+            "storageUri": "[concat('http://',variables('prefix'), 'sa','.blob.core.windows.net/')]"
+          }
+        }
+      }
+    },
+
+
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(parameters('prefix'), 'nifi', copyindex(1))]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('apiVersion')]",
+      "copy": {
+          "count": "[parameters('nifiCount')]",
+          "name": "nifisCount"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('nifiSku')]"
+        },
+        "osProfile": {
+          "computerName": "[concat('nifi', copyIndex(1))]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "linuxConfiguration": "[variables('sshConfig')]"
+        },
+        "storageProfile": {
+          "imageReference": "[variables('imageReference')]",
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/','nifi', copyindex(1), '/os/os.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [{
+            "name": "datadisk0",
+            "diskSizeGB": "[variables('sizeOfEachDataDiskInGB')]",
+            "lun": 0,
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/','nifi', copyindex(1), '/data/datadisk0.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "Empty"
+          }, {
+            "name": "datadisk1",
+            "diskSizeGB": "[variables('sizeOfEachDataDiskInGB')]",
+            "lun": 1,
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/data/datadisk1.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "Empty"
+          }, {
+            "name": "datadisk2",
+            "diskSizeGB": "[variables('sizeOfEachDataDiskInGB')]",
+            "lun": 2,
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/data/datadisk2.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "Empty"
+          }]
+        },
+        "networkProfile": {
+          "networkInterfaces": [{
+            "id": "[resourceId(variables('infrastructureGroup'), 'Microsoft.Network/networkInterfaces/', concat(variables('prefix'), 'nifi', copyIndex(1), 'ipconfigNetworkPublic'))]",
+            "properties": {
+              "primary": true
+            }
+          }]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "true",
+            "storageUri": "[concat('http://',variables('prefix'), 'sa','.blob.core.windows.net/')]"
+          }
+        }
+      }
+    },
+
+
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(parameters('prefix'), 'solr', copyindex(1))]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('apiVersion')]",
+      "copy": {
+          "count": "[parameters('solrCount')]",
+          "name": "solrCount"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('solrSku')]"
+        },
+        "osProfile": {
+          "computerName": "[concat('solr', copyIndex(1))]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "linuxConfiguration": "[variables('sshConfig')]"
+        },
+        "storageProfile": {
+          "imageReference": "[variables('imageReference')]",
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/','solr', copyindex(1), '/os/os.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [{
+            "name": "datadisk0",
+            "diskSizeGB": "[variables('sizeOfEachDataDiskInGB')]",
+            "lun": 0,
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/','solr', copyindex(1), '/data/datadisk0.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "Empty"
+          }]
+        },
+        "networkProfile": {
+          "networkInterfaces": [{
+            "id": "[resourceId(variables('infrastructureGroup'), 'Microsoft.Network/networkInterfaces/', concat(variables('prefix'), 'solr', copyIndex(1), 'ipconfigNetwork1'))]",
+            "properties": {
+              "primary": true
+            }
+          }]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "true",
+            "storageUri": "[concat('http://',variables('prefix'), 'sa','.blob.core.windows.net/')]"
+          }
+        }
+      }
+    },
+
+
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(parameters('prefix'), 'master', copyindex(1))]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('apiVersion')]",
+      "copy": {
+          "count": "[parameters('masterCount')]",
+          "name": "masterCount"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('masterSku')]"
+        },
+        "osProfile": {
+          "computerName": "[concat('master', copyIndex(1))]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "linuxConfiguration": "[variables('sshConfig')]"
+        },
+        "storageProfile": {
+          "imageReference": "[variables('imageReference')]",
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/','master', copyindex(1),'os/os.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [{
+            "id": "[resourceId(variables('infrastructureGroup'), 'Microsoft.Network/networkInterfaces/', concat(variables('prefix'), 'master', copyIndex(1), 'ipconfigNetwork1'))]",
+            "properties": {
+              "primary": true
+            }
+          }]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "true",
+            "storageUri": "[concat('http://',variables('prefix'), 'sa','.blob.core.windows.net/')]"
+          }
+        }
+      }
+    },
+
+
+
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(parameters('prefix'), 'slave', copyindex(1))]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('apiVersion')]",
+      "copy": {
+          "count": "[parameters('slaveCount')]",
+          "name": "slaveCount"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('slaveSku')]"
+        },
+        "osProfile": {
+          "computerName": "[concat('slave', copyIndex(1))]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "linuxConfiguration": "[variables('sshConfig')]"
+        },
+        "storageProfile": {
+          "imageReference": "[variables('imageReference')]",
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/','slave', copyindex(1), '/os/os.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [{
+            "name": "datadisk0",
+            "diskSizeGB": "[variables('sizeOfEachDataDiskInGB')]",
+            "lun": 0,
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/','slave', copyindex(1), '/data/datadisk0.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "Empty"
+          },{
+            "name": "datadisk1",
+            "diskSizeGB": "[variables('sizeOfEachDataDiskInGB')]",
+            "lun": 1,
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/','slave', copyindex(1), '/data/datadisk1.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "Empty"
+          },{
+            "name": "datadisk2",
+            "diskSizeGB": "[variables('sizeOfEachDataDiskInGB')]",
+            "lun": 2,
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/','slave', copyindex(1), '/data/datadisk2.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "Empty"
+          },{
+            "name": "datadisk3",
+            "diskSizeGB": "[variables('sizeOfEachDataDiskInGB')]",
+            "lun": 3,
+            "vhd": {
+              "uri": "[concat('http://', parameters('prefix'), 'sa', '.blob.core.windows.net/','slave', copyindex(1), '/data/datadisk3.vhd')]"
+            },
+            "caching": "ReadOnly",
+            "createOption": "Empty"
+          }]
+        },
+        "networkProfile": {
+          "networkInterfaces": [{
+            "id": "[resourceId(variables('infrastructureGroup'), 'Microsoft.Network/networkInterfaces/', concat(variables('prefix'), 'slaves', copyIndex(1), 'ipconfigNetwork1'))]",
+            "properties": {
+              "primary": true
+            }
+          }]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "true",
+            "storageUri": "[concat('http://',variables('prefix'), 'sa','.blob.core.windows.net/')]"
+          }
+        }
+      }
+    }
+  ]
+}

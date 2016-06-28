@@ -33,4 +33,4 @@ openssl ca -batch -config openssl.conf -passin file:ca-passwd -out $REQPATH/${NA
 # turn it into a p12
 openssl pkcs12 -export -aes256 -out $REQPATH/${NAME}.p12 -passout pass:$CLI_PASSWORD -inkey $REQPATH/${NAME}.client.key -passin pass:$CLI_PASSWORD -in $REQPATH/${NAME}.client.crt -certfile CA/cacert.pem
 
-keytool -importkeystore -srckeystore $REQPATH/${NAME}.p12 -srcstoretype pkcs12 -srcalias 1 -srcstorepass $CLI_PASSWORD -destkeystore $REQPATH/${NAME}.jks -deststoretype jks -deststorepass $CLI_PASSWORD -destalias ${NAME}
+${keytool} -importkeystore -srckeystore $REQPATH/${NAME}.p12 -srcstoretype pkcs12 -srcalias 1 -srcstorepass $CLI_PASSWORD -destkeystore $REQPATH/${NAME}.jks -deststoretype jks -deststorepass $CLI_PASSWORD -destalias ${NAME}

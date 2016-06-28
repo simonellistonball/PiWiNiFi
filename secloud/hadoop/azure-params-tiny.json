@@ -1,0 +1,26 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceLocation": { "value": "North Europe" },
+    "slaveCount": { "value": 3 },
+    "nifiCount": { "value": 1 },
+    "masterCount": { "value": 3 },
+    "solrCount": { "value": 1 },
+    "adminUsername": { "value": "admin" },
+    "adminPassword": { "value": "Sr;{~8ixfzveZcg63=:lb~[yV)O4" },
+    "sshKeyData": { "value": "ssh-rsa MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuGIXDcMTL2S8ixAlnycq
+n+a3ZPkfgzNoM7dHBBWLvf0lVdxlgBrxEnrxgjBGWqmqTA1oGPvZ+bhYEESqPFHl
+R9XCbkakFGTmOOGYmaJIjGfpJGOazzo+OAKyl76kA89AwdRFcjGAfCwE45aA7XII
+ZedWf8toVzI2saXsGKJE4fGE3jD78gWL7yLkSFtBDjDAy130dxF2i8EALZQ41pEG
+HsxZ5DTOJULGCedKIW/wwOvGQgYb02Kj2D2xZnjR7m7f8prnHnA2gCRW8JnR3+o/
+vMW0/xx/+BmwlF4FPUTQioCXwZTnIBBAQstHG4P4Rc9rGsDAPnqbl+DoWNrPWrbo
+FQIDAQAB" },
+    "slaveSku": { "value": "Standard_A2" },
+    "nifiSku": { "value": "Standard_A2" },
+    "solrSku": { "value": "Standard_A2" },
+    "masterSku": { "value": "Standard_A2" },
+    "gatewaySku": { "value": "Standard_A2" },
+    "prefix": { "value": "tinyHadoop" }
+  }
+}

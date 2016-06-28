@@ -132,11 +132,11 @@ nifi.sensitive.props.provider=BC
 
 nifi.security.keystore=/opt/certs/keystore.jks
 nifi.security.keystoreType=jks
-nifi.security.keystorePasswd=87~J#8JR81D#SD~?_uJ8%qL)KbgJ06oS
-nifi.security.keyPasswd=87~J#8JR81D#SD~?_uJ8%qL)KbgJ06oS
+nifi.security.keystorePasswd=iftbUA'0n!Zmi25l?ay*hk%#GZ?txuCR
+nifi.security.keyPasswd=iftbUA'0n!Zmi25l?ay*hk%#GZ?txuCR
 nifi.security.truststore=/opt/certs/truststore.jks
 nifi.security.truststoreType=jks
-nifi.security.truststorePasswd=HW(uyIOrq3AD8xK_7*W)ESD0q9?Ym9fq
+nifi.security.truststorePasswd=4@%j69'm!SW8_t9fLTWfnTbqVq7X';KN
 nifi.security.needClientAuth=true
 nifi.security.user.credential.cache.duration=24 hours
 nifi.security.user.authority.provider=file-provider

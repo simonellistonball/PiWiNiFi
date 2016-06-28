@@ -1,5 +1,5 @@
 nifi:
-  url: https://104.45.226.124:8443
+  url: https://cloud.things.simonellistonball.com:8443
 
   # when making changes via API, need a unique client ID, can be anything
   clientId: PiWiNiFi
@@ -28,10 +28,10 @@ controllerServices:
     state: ENABLED
     config:
       Keystore Filename: /opt/certs/keystore.jks
-      Keystore Password: 87~J#8JR81D#SD~?_uJ8%qL)KbgJ06oS
+      Keystore Password: iftbUA'0n!Zmi25l?ay*hk%#GZ?txuCR
       Keystore Type: JKS
       Truststore Filename: /opt/certs/truststore.jks
-      Truststore Password: HW(uyIOrq3AD8xK_7*W)ESD0q9?Ym9fq
+      Truststore Password: 4@%j69'm!SW8_t9fLTWfnTbqVq7X';KN
       Truststore Type: JKS
       SSL Protocol: TLSv1.2
 

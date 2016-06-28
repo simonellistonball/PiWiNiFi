@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<users>
+  <user dn="CN=sball, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
+    <role name="ROLE_DFM"/><role name="ROLE_ADMIN"/><role name="ROLE_PROVENANCE"/>
+  </user>
+  <user dn="CN=dchaffey, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
+    <role name="ROLE_DFM"/><role name="ROLE_ADMIN"/><role name="ROLE_PROVENANCE"/>
+  </user>
+  <user dn="CN=jdyer, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
+    <role name="ROLE_DFM"/><role name="ROLE_ADMIN"/><role name="ROLE_PROVENANCE"/>
+  </user>
+
+  <user dn="CN=piwinifi1.things.simonellistonball.com, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
+    <role name="ROLE_NIFI"/>
+  </user>
+  <user dn="CN=piwinifi2.things.simonellistonball.com, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
+      <role name="ROLE_NIFI"/>
+  </user>
+  <user dn="CN=piwinifi3.things.simonellistonball.com, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
+      <role name="ROLE_NIFI"/>
+  </user>
+  <user dn="CN=photo.things.simonellistonball.com, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
+      <role name="ROLE_NIFI"/>
+  </user>
+  <user dn="CN=cloud.things.simonellistonball.com, OU=PiWiNiFi Demo, O=Hortonworks, ST=California, C=US">
+      <role name="ROLE_NIFI"/>
+  </user>
+</users>

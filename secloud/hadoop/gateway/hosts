@@ -1,0 +1,22 @@
+127.0.0.1 localhost
+
+10.0.0.10 piwinifigateway.local
+
+10.0.0.11 piwinifimaster1.local
+10.0.0.12 piwinifimaster2.local
+10.0.0.13 piwinifimaster3.local
+
+10.0.0.21 piwinifinifi1.local
+10.0.0.22 piwinifinifi2.local
+10.0.0.23 piwinifinifi3.local
+
+10.0.0.31 piwinifisolr1.local
+10.0.0.32 piwinifisolr2.local
+10.0.0.33 piwinifisolr3.local
+
+
+10.0.0.61 piwinifislave1.local
+10.0.0.62 piwinifislave2.local
+10.0.0.63 piwinifislave3.local
+10.0.0.64 piwinifislave4.local
+10.0.0.65 piwinifislave5.local

@@ -61,6 +61,7 @@ run each nifi docker (secloud|booth|cloud/nifi/ && ./runNifi.sh)
 
 * In pi/deploy, edit deploy.cfg to contain your deployment information (Event WiFi, Timezone, and Bastion host running deployment service)
 * Put your version of NiFi into the pi/deploy directory as nifi.tar.gz (suggest a cut down version of just the /nifi/* content)
+* Add client certificates to the deploy directory.
 * Deploy Rasbian to your Raspberry Pi3
 * Power on the device in the intended location
 * Copy the contents of the pi/deploy directory to the /home/pi/ directory.

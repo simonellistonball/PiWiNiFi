@@ -1,5 +1,6 @@
 #!/bin/bash
 REMOTE_PORT=8444
+NIFI_HOST=cloud.things.simonellistonball.com
 NIFI_PORT=8443
 BASE_PATH=${1:-$PWD}
 CMD=$2
@@ -45,8 +46,9 @@ docker run -d -i -t \
     -v $(realpath ./repos/content_repository):"${NIFI_HOME}/content_repository" \
     -v $(realpath ./repos/provenance_repository):"${NIFI_HOME}/provenance_repository" \
     -e NIFI_PORT=${NIFI_PORT} \
+    -e NIFI_HOST=${NIFI_HOST} \
     -e REMOTE_PORT=${REMOTE_PORT} \
-    -e BANNER="Booth Nifi" \
+    -e BANNER="Cloud Nifi" \
     -p ${NIFI_PORT}:${NIFI_PORT} \
     -p ${REMOTE_PORT}:${REMOTE_PORT} \
     --ulimit nofile=50000:50000 \

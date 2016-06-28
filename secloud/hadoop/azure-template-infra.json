@@ -1,0 +1,611 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01-preview/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "infrastructureGroup": {
+      "metadata": {
+        "description": "Group containing network and storage"
+      },
+      "type": "string"
+    },
+    "slaveSku": {
+      "type": "string",
+      "defaultValue": "Standard_D14",
+      "metadata": {
+        "description": "Size of VMs in the VM Scale Set."
+      }
+    },
+    "nifiSku": {
+      "type": "string",
+      "defaultValue": "Standard_F8",
+      "metadata": {
+        "description": "Size of VMs in the Nifi Scale Set."
+      }
+    },
+    "solrSku": {
+      "type": "string",
+      "defaultValue": "Standard_D13",
+      "metadata": {
+        "description": "Size of VMs in the Solr Scale Set."
+      }
+    },
+    "masterSku": {
+      "type": "string",
+      "defaultValue": "Standard_D13",
+      "metadata": {
+        "description": "Size of VMs in the Master Scale Set."
+      }
+    },
+    "gatewaySku": {
+      "type": "string",
+      "defaultValue": "Standard_D13",
+      "metadata": {
+        "description": "Size of VMs in the Gateway Scale Set."
+      }
+    },
+    "adminPassword": {
+      "metadata": {
+        "description": "Admin password on all VMs."
+      },
+      "type": "securestring"
+    },
+    "adminUsername": {
+      "metadata": {
+        "description": "Admin username on all VMs."
+      },
+      "type": "string"
+    },
+    "nifiCount": {
+      "maxValue": 3,
+      "metadata": {
+        "description": "Number of nifi instances (3 or less)."
+      },
+      "type": "int"
+    },
+    "slaveCount": {
+      "maxValue": 100,
+      "metadata": {
+        "description": "Number of slave instances (3 or less)."
+      },
+      "type": "int"
+    },
+    "masterCount": {
+      "maxValue": 3,
+      "metadata": {
+        "description": "Number of master instances (3 or less)."
+      },
+      "type": "int"
+    },
+    "solrCount": {
+      "maxValue": 3,
+      "metadata": {
+        "description": "Number of solr instances (3 or less)."
+      },
+      "type": "int"
+    },
+    "prefix": {
+      "metadata": {
+        "description": "Unique prefix used for all resource naming"
+      },
+      "type": "string"
+    },
+    "sshKeyData": {
+      "metadata": {
+        "description": "SSH rsa public key file as a string."
+      },
+      "type": "string"
+    },
+    "vnetAddressPrefix": {
+      "defaultValue": "10.0.0.0/16",
+      "metadata": {
+        "description": "Address prefix"
+      },
+      "type": "string"
+    }
+  },
+  "variables": {
+    "apiVersion": "2015-06-15",
+    "gatewayName": "gateway",
+    "hadoopSubnetName": "hadoopSubnet",
+    "hadoopSubnetPrefix": "10.0.0.0/24",
+    "subnetIPPrefix": "10.0.0.",
+    "machineCount": 16,
+    "machines": [
+      {
+        "group": "gateway",
+        "ip": "10",
+        "name": "gateway"
+      },
+      {
+        "group": "gateway",
+        "ip": "101",
+        "name": "notebook"
+      },
+      {
+        "group": "nifis",
+        "ip": "21",
+        "name": "nifi1",
+        "publicIp": "51"
+      },
+      {
+        "group": "nifis",
+        "ip": "22",
+        "name": "nifi2",
+        "publicIp": "52"
+      },
+      {
+        "group": "nifis",
+        "ip": "23",
+        "name": "nifi3",
+        "publicIp": "53"
+      },
+      {
+        "group": "masters",
+        "ip": "11",
+        "name": "master1"
+      },
+      {
+        "group": "masters",
+        "ip": "12",
+        "name": "master2"
+      },
+      {
+        "group": "masters",
+        "ip": "13",
+        "name": "master3"
+      },
+      {
+        "group": "solrs",
+        "ip": "31",
+        "name": "solr1"
+      },
+      {
+        "group": "solrs",
+        "ip": "32",
+        "name": "solr2"
+      },
+      {
+        "group": "solrs",
+        "ip": "33",
+        "name": "solr3"
+      },
+      {
+        "group": "slaves",
+        "ip": "61",
+        "name": "slaves1"
+      },
+      {
+        "group": "slaves",
+        "ip": "62",
+        "name": "slaves2"
+      },
+      {
+        "group": "slaves",
+        "ip": "63",
+        "name": "slaves3"
+      },
+      {
+        "group": "slaves",
+        "ip": "64",
+        "name": "slaves4"
+      },
+      {
+        "group": "slaves",
+        "ip": "65",
+        "name": "slaves5"
+      }
+    ],
+    "prefix": "[parameters('prefix')]",
+    "publicName": "piwinifi",
+    "notebookName": "piwizeppelin",
+    "storageAccountType": "Standard_LRS"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "hadoopVnet",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('vnetAddressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('hadoopSubnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('hadoopSubnetPrefix')]"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/virtualNetworks"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "[variables('publicName')]",
+      "properties": {
+        "dnsSettings": {
+          "domainNameLabel": "[variables('publicName')]"
+        },
+        "publicIPAllocationMethod": "Dynamic"
+      },
+      "type": "Microsoft.Network/publicIPAddresses"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "[variables('notebookName')]",
+      "properties": {
+        "dnsSettings": {
+          "domainNameLabel": "[variables('notebookName')]"
+        },
+        "publicIPAllocationMethod": "Dynamic"
+      },
+      "type": "Microsoft.Network/publicIPAddresses"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "copy": {
+        "count": "[parameters('nifiCount')]",
+        "name": "networkLoop"
+      },
+      "location": "[resourceGroup().location]",
+      "name": "[concat('piwinifi', copyIndex(1))]",
+      "properties": {
+        "dnsSettings": {
+          "domainNameLabel": "[concat('piwinifi', copyIndex(1))]"
+        },
+        "publicIPAllocationMethod": "Dynamic"
+      },
+      "type": "Microsoft.Network/publicIPAddresses"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "gatewaySecurityGroup",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "sshRule",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow SSH",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "22",
+              "direction": "Inbound",
+              "priority": 1000,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          },{
+            "name": "ambari",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow Ambari",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "8080",
+              "direction": "Inbound",
+              "priority": 1001,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          },
+          {
+            "name": "nifiRules",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow NiFi",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "9443-9444",
+              "direction": "Inbound",
+              "priority": 1002,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          },
+          {
+            "name": "nifiCluster",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow NiFi Cluster",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "destinationPortRange": "9000-9001",
+              "direction": "Inbound",
+              "priority": 1003,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "sourcePortRange": "*"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "nifiSecurityGroup",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "sshRule",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow SSH",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "22",
+              "direction": "Inbound",
+              "priority": 1000,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          },{
+            "name": "nifiRules9",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow NiFi",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "9443-9444",
+              "direction": "Inbound",
+              "priority": 1001,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          },{
+            "name": "nifiRules8",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow NiFi",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "8443-8444",
+              "direction": "Inbound",
+              "priority": 1002,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          },
+          {
+            "name": "nifiCluster",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow NiFi Cluster",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "destinationPortRange": "9000-9001",
+              "direction": "Inbound",
+              "priority": 1003,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "sourcePortRange": "*"
+            }
+          },
+          {
+            "name": "nifiExternal",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow NiFi Services",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "8083-8085",
+              "direction": "Inbound",
+              "priority": 1004,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "zeppelinSecurityGroup",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "sshRule",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow SSH",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "22",
+              "direction": "Inbound",
+              "priority": 1000,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          },{
+            "name": "zeppelin",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow Zeppelin",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "8080-8081",
+              "direction": "Inbound",
+              "priority": 1001,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          },{
+            "name": "zeppelin9",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow Zeppelin",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "9995-9996",
+              "direction": "Inbound",
+              "priority": 1001,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('prefix'), variables('machines')[0].name, 'nicPublic')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "[concat(variables('prefix'),variables('machines')[0].name, 'ipPublic')]",
+            "properties": {
+              "PrivateIpAddress": "[concat(variables('subnetIPPrefix'),variables('machines')[0].ip)]",
+              "PrivateIpAllocationMethod": "Static",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nifiSecurityGroup')]"
+              },
+              "primary": true,
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicName'))]"
+              },
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', 'hadoopVnet'),'/subnets/', variables('hadoopSubnetName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('prefix'), variables('machines')[1].name, 'nicPublic')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "[concat(variables('prefix'),variables('machines')[1].name, 'ipPublic')]",
+            "properties": {
+              "PrivateIpAddress": "[concat(variables('subnetIPPrefix'),variables('machines')[1].ip)]",
+              "PrivateIpAllocationMethod": "Static",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'zeppelinSecurityGroup')]"
+              },
+              "primary": true,
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('notebookName'))]"
+              },
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', 'hadoopVnet'),'/subnets/', variables('hadoopSubnetName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "copy": {
+        "count": "[parameters('nifiCount')]",
+        "name": "networkLoop"
+      },
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('prefix'), variables('machines')[copyIndex(2)].name, 'nicPublic')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "[concat(variables('prefix'),variables('machines')[copyIndex(2)].name, 'ipPublic')]",
+            "properties": {
+              "PrivateIpAddress": "[concat(variables('subnetIPPrefix'),variables('machines')[copyIndex(2)].ip)]",
+              "PrivateIpAllocationMethod": "Static",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nifiSecurityGroup')]"
+              },
+              "primary": true,
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat('piwinifi', copyIndex(1)))]"
+              },
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', 'hadoopVnet'),'/subnets/', variables('hadoopSubnetName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "copy": {
+        "count": "[sub(variables('machineCount'),5)]",
+        "name": "networkLoop"
+      },
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('prefix'),variables('machines')[copyIndex(5)].name, 'nic1')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "[concat(variables('prefix'),variables('machines')[copyIndex(4)].name, 'ipInt')]",
+            "properties": {
+              "privateIPAddress": "[concat(variables('subnetIPPrefix'),variables('machines')[copyIndex(5)].ip)]",
+              "privateIPAllocationMethod": "Static",
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', 'hadoopVnet'),'/subnets/', variables('hadoopSubnetName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('prefix'), resourceGroup().location, 'sa')]",
+      "properties": {
+        "accountType": "[variables('storageAccountType')]"
+      },
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "nifis",
+      "type": "Microsoft.Compute/availabilitySets"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "slaves",
+      "type": "Microsoft.Compute/availabilitySets"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "masters",
+      "type": "Microsoft.Compute/availabilitySets"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "solrs",
+      "type": "Microsoft.Compute/availabilitySets"
+    }
+  ]
+}

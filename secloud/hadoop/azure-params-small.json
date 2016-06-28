@@ -1,0 +1,20 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "infrastructureGroup": { "value": "sballHadoopInfrastructureWest" },
+    "slaveCount": { "value": 5 },
+    "nifiCount": { "value": 3 },
+    "masterCount": { "value": 3 },
+    "solrCount": { "value": 3 },
+    "adminUsername": { "value": "sball" },
+    "adminPassword": { "value": "Sr;{~8ixfzveZcg63=:lb~[yV)O4" },
+    "sshKeyData": { "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCybZ7GfEoQxrNgvLSLk+9yQwRwBgMANI28caN7O/E/HMGo4MdUH/YCrDdoEek2WilxxBo8nxRKQpANvpXj1qWmQsRRmUu9qYDIBP7d8Q5qTdo6efaAtO0bK5wLbN3c70LJMPYPBkLJPbpb0npuGYu8Dnac8I/ngJjjz2e0uzzOSVUplkD1/5ZFl2DDJtbJTrr5AcTj7aj2NFft2zMC5/gCN0/R/0i6HCVtZg2AYpjMTOFnUniFDnv8l4b9v9CXSWDFW9iyXVHa2cQBWfdeOGvEYsYaZjfA8yg6TozWMvx4bB+OncqUfMUoO7MJa9wVWGO9g6rPShMzTWbYgc+mPcZB sball@sball.home" },
+    "slaveSku": { "value": "Standard_A3" },
+    "nifiSku": { "value": "Standard_A1" },
+    "solrSku": { "value": "Standard_A2" },
+    "masterSku": { "value": "Standard_A3" },
+    "gatewaySku": { "value": "Standard_A3" },
+    "prefix": { "value": "piwinifi" }
+  }
+}

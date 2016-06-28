@@ -6,11 +6,11 @@ nifi_props_file=${NIFI_HOME}/conf/nifi.properties
 # Disable HTTP and enable HTTPS
 sed -i -e 's|nifi.web.http.port=.*$|nifi.web.http.port=|' ${nifi_props_file}
 sed -i -e "s|nifi.web.https.port=.*$|nifi.web.https.port=${NIFI_PORT}|" ${nifi_props_file}
-sed -i -e "s|nifi.web.https.host=.*$|nifi.web.https.host=${HOSTNAME}|" ${nifi_props_file}
+#sed -i -e "s|nifi.web.https.host=.*$|nifi.web.https.host=${NIFI_HOST}|" ${nifi_props_file}
 
 # Enable remote ports
 sed -i -e "s|nifi.remote.input.socket.port=.*$|nifi.remote.input.socket.port=${REMOTE_PORT}|" ${nifi_props_file}
-sed -i -e "s|nifi.remote.input.socket.host=.*$|nifi.remote.input.socket.host=${HOSTNAME}|" ${nifi_props_file}
+sed -i -e "s|nifi.remote.input.socket.host=.*$|nifi.remote.input.socket.host=${NIFI_HOST}|" ${nifi_props_file}
 
 # Set banner text
 sed -i -e "s|nifi.ui.banner.text=.*$|nifi.ui.banner.text=${BANNER}|" ${nifi_props_file}
@@ -22,6 +22,8 @@ then
   mkdir -p ${NIFI_HOME}/logs/
   touch ${NIFI_HOME}/logs/nifi-app.log
 fi
+
+IP=$(ip addr show eth0 | grep inet | awk '{print $2}' | cut -f 1 -d '/')
 
 # Continuously provide logs so that 'docker logs' can produce them
 tail -F ${NIFI_HOME}/logs/nifi-app.log &

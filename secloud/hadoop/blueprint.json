@@ -12,14 +12,19 @@
         { "name": "PIG" },
         { "name": "SPARK_CLIENT" },
         { "name": "HBASE_CLIENT" },
-        { "name": "PHOENIX_QUERY_SERVER" }
+        { "name": "PHOENIX_QUERY_SERVER" },
+        { "name": "METRICS_COLLECTOR" },
+        { "name": "METRICS_MONITOR" },
+        { "name": "KNOX_GATEWAY"}
       ]
     },
     {
       "name": "nifi",
+      "cardinality": 3,
       "components": [
         { "name": "HDFS_CLIENT" },
-        { "name": "HBASE_CLIENT" }
+        { "name": "HBASE_CLIENT" },
+        { "name": "METRICS_MONITOR" }
       ]
     },
     {
@@ -32,8 +37,7 @@
         { "name": "APP_TIMELINE_SERVER" },
         { "name": "SPARK_JOBHISTORYSERVER" },
         { "name": "KAFKA_BROKER" },
-        { "name": "DATANODE" },
-        { "name": "NODEMANAGER" }
+        { "name": "METRICS_MONITOR" }
       ]
     },
     {
@@ -42,21 +46,40 @@
       "components": [
         { "name": "SECONDARY_NAMENODE" },
         { "name": "RESOURCEMANAGER" },
+        { "name": "ZOOKEEPER_SERVER" },
         { "name": "HBASE_MASTER" },
-        { "name": "DATANODE" },
-        { "name": "NODEMANAGER" },
+        { "name": "METRICS_MONITOR" }
+      ]
+    },
+    {
+      "name": "master_3",
+      "cardinality" : "1",
+      "components": [
+        { "name": "ZOOKEEPER_SERVER" },
         { "name": "HIVE_SERVER" },
         { "name": "HIVE_METASTORE" },
         { "name": "WEBHCAT_SERVER" },
-        { "name": "HCAT" }
+        { "name": "HCAT" },
+        { "name": "MYSQL_SERVER" },
+        { "name": "METRICS_MONITOR" }
       ]
     },
     {
       "name": "slaves",
+      "cardinality": 5,
       "components": [
         { "name": "DATANODE" },
         { "name": "NODEMANAGER" },
-        { "name": "HBASE_REGIONSERVER" }
+        { "name": "HBASE_REGIONSERVER" },
+        { "name": "METRICS_MONITOR" }
+      ]
+    },
+    {
+      "name": "solr",
+      "cardinality": 3,
+      "components": [
+        { "name": "HDFS_CLIENT" },
+        { "name": "METRICS_MONITOR" }
       ]
     }
   ],
@@ -84,10 +107,33 @@
           "hbase_master_heapsize": "768"
         }
       }
+    },
+    {
+      "hdfs-site" : {
+        "properties": {
+          "dfs.datanode.data.dir" : "/mnt/datac/hdfs/,/mnt/datad/hdfs/"
+        }
+      }
+    },
+    {
+      "knox-env": {
+        "properties": {
+          "knox_master_secret": "knox"
+        }
+      }
+    },
+
+    {
+      "users-ldif" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "content" : "dn: dc=hadoop,dc=apache,dc=org\nobjectclass: organization\nobjectclass: dcObject\no: Hadoop\ndc: hadoop\n\n# Entry for a sample people container\n# Please replace with site specific values\ndn: ou=people,dc=hadoop,dc=apache,dc=org\nobjectclass:top\nobjectclass:organizationalUnit\nou: people\n\n# Entry for a sample end user\n# Please replace with site specific values\ndn: uid=guest,ou=people,dc=hadoop,dc=apache,dc=org\nobjectclass:top\nobjectclass:person\nobjectclass:organizationalPerson\nobjectclass:inetOrgPerson\ncn: Guest\nsn: User\nuid: guest\nuserPassword:guest\n\n# entry for sample user admin\ndn: uid=admin,ou=people,dc=hadoop,dc=apache,dc=org\nobjectclass:top\nobjectclass:person\nobjectclass:organizationalPerson\nobjectclass:inetOrgPerson\ncn: Admin\nsn: Admin\nuid: admin\nuserPassword:admin\n"
+        }
+      }
     }
   ],
   "Blueprints" : {
-    "blueprint_name": "fullCluster",
+    "blueprint_name": "piwinifi",
     "stack_name" : "HDP",
     "stack_version" : "2.4"
   }

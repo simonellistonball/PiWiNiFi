@@ -1,0 +1,44 @@
+nifi:
+  url: https://secloud.things.simonellistonball.com:9443
+
+  # when making changes via API, need a unique client ID, can be anything
+  clientId: PiWiNiFi
+
+  # Where to fetch the actual template XML data from
+  # Escape complex URLs with quotes
+  templateUri: "file:///Users/sball/Documents/PiWiNiFi/secloud/nifi/SECloud_Flow.xml"
+
+  # Tell NiFi we want some things removed to make way for this (re-) deployment
+  undeploy:
+
+    # Names of controller services to remove. Ignores any missing ones
+    controllerServices:
+      - StandardSSLContextService
+
+    # Names of process groups to remove. These are in your template
+    processGroups: ~
+
+    # Template names to remove. Because we're updating with a new version
+    templates:
+      - SECloud Flow
+
+# Instantiate these controller services, our template uses them
+controllerServices:
+  StandardSSLContextService:
+    state: ENABLED
+    config:
+      Keystore Filename: conf/keystore.jks
+      Keystore Password: "!^p4r@r4WV+rQZ^@W_(j#MlXW4QMDBM?"
+      Keystore Type: JKS
+      Truststore Filename: conf/truststore.jks
+      Truststore Password: "aZ6XOT~3y+YL2CMZU;K%qFYcA20uW!xL"
+      Truststore Type: JKS
+      SSL Protocol: TLSv1.2
+
+# Processors belong to process groups.
+# This way random ones won't be picked up (unlike a search api,
+# which returns every occurence)
+processGroups:
+
+  # Empty in this case, as our template puts everything in a group
+  root: ~

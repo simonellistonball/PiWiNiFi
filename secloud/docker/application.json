@@ -1,0 +1,114 @@
+{
+  "id": "/cloud",
+  "cmd": null,
+  "cpus": 4,
+  "mem": 2048,
+  "disk": 50000,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "volumes": [
+      {
+        "containerPath": "/opt/certs",
+        "hostPath": "/data/cloud/certs",
+        "mode": "RO"
+      },
+      {
+        "containerPath": "/opt/nifi/custom/",
+        "hostPath": "/data/cloud/custom",
+        "mode": "RO"
+      },
+      {
+        "containerPath": "/opt/nifi/custom/",
+        "hostPath": "/data/cloud/custom",
+        "mode": "RO"
+      },
+
+      {
+        "containerPath": "/opt/nifi/conf",
+        "hostPath": "conf",
+        "mode": "RW"
+      },
+      {
+        "containerPath": "conf",
+        "mode": "RW",
+        "persistent": {
+          "size": 20
+        }
+      },
+
+      {
+        "containerPath": "/opt/nifi/content_repository",
+        "hostPath": "content_repository",
+        "mode": "RW"
+      },
+      {
+        "containerPath": "content_repository",
+        "mode": "RW",
+        "persistent": {
+          "size": 20000
+        }
+      },
+
+      {
+        "containerPath": "/opt/nifi/flowfile_repository",
+        "hostPath": "flowfile_repository",
+        "mode": "RW"
+      },
+      {
+        "containerPath": "flowfile_repository",
+        "mode": "RW",
+        "persistent": {
+          "size": 20000
+        }
+      },
+
+      {
+        "containerPath": "/opt/nifi/database_repository",
+        "hostPath": "database_repository",
+        "mode": "RW"
+      },
+      {
+        "containerPath": "database_repository",
+        "mode": "RW",
+        "persistent": {
+          "size": 20000
+        }
+      }
+    ],
+    "docker": {
+      "image": "simonellistonball/nifi",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 8443,
+          "hostPort": 0,
+          "servicePort": 10000,
+          "protocol": "tcp",
+          "name": "nifi",
+          "labels": {}
+        },
+        {
+          "containerPort": 8444,
+          "hostPort": 0,
+          "servicePort": 10001,
+          "protocol": "tcp",
+          "name": "nifi-remote",
+          "labels": {}
+        }
+      ],
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": false
+    }
+  },
+  "env": {
+    "NIFI_PORT": "8443",
+    "REMOTE_PORT": "8444"
+  },
+  "upgradeStrategy": {
+    "minimumHealthCapacity": 0.5,
+    "maximumOverCapacity": 0
+  },
+  "healthChecks": []
+}

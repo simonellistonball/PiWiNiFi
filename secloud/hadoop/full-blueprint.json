@@ -1,0 +1,106 @@
+{
+  "host_groups" : [
+    {
+      "name": "gateway",
+      "cardinality" : "1",
+      "components": [
+        { "name": "HDFS_CLIENT" },
+        { "name": "TEZ_CLIENT" },
+        { "name": "YARN_CLIENT" },
+        { "name": "ZOOKEEPER_CLIENT" },
+        { "name": "HIVE_CLIENT" },
+        { "name": "PIG" },
+        { "name": "SPARK_CLIENT" },
+        { "name": "HBASE_CLIENT" },
+        { "name": "PHOENIX_QUERY_SERVER" },
+        { "name": "METRICS_COLLECTOR" },
+        { "name": "METRICS_MONITOR" }
+      ]
+    },
+    {
+      "name": "nifi",
+      "cardinality": 3,
+      "components": [
+        { "name": "HDFS_CLIENT" },
+        { "name": "HBASE_CLIENT" },
+        { "name": "METRICS_MONITOR" }
+      ]
+    },
+    {
+      "name": "master_1",
+      "cardinality" : "1",
+      "components": [
+        { "name": "NAMENODE" },
+        { "name": "ZOOKEEPER_SERVER" },
+        { "name": "HISTORYSERVER" },
+        { "name": "APP_TIMELINE_SERVER" },
+        { "name": "SPARK_JOBHISTORYSERVER" },
+        { "name": "KAFKA_BROKER" },
+        { "name": "METRICS_MONITOR" }
+      ]
+    },
+    {
+      "name": "master_2",
+      "cardinality" : "1",
+      "components": [
+        { "name": "SECONDARY_NAMENODE" },
+        { "name": "RESOURCEMANAGER" },
+        { "name": "HBASE_MASTER" },
+        { "name": "HIVE_SERVER" },
+        { "name": "HIVE_METASTORE" },
+        { "name": "WEBHCAT_SERVER" },
+        { "name": "HCAT" },
+        { "name": "METRICS_MONITOR" }
+      ]
+    },
+    {
+      "name": "slaves",
+      "cardinality": 5,
+      "components": [
+        { "name": "DATANODE" },
+        { "name": "NODEMANAGER" },
+        { "name": "HBASE_REGIONSERVER" },
+        { "name": "METRICS_MONITOR" }
+      ]
+    },
+    {
+      "name": "solr",
+      "cardinality": 3,
+      "components": [
+        { "name": "HDFS_CLIENT" },
+        { "name": "METRICS_MONITOR" }
+      ]
+    }
+  ],
+  "configurations": [
+    {
+      "core-site": {
+        "properties" : {
+          "hadoop.proxyuser.root.hosts": "*",
+          "hadoop.proxyuser.root.groups": "*",
+          "hadoop.proxyuser.hcat.hosts": "*",
+          "hadoop.proxyuser.hcat.groups": "*",
+          "hadoop.proxyuser.hdfs.hosts": "*",
+          "hadoop.proxyuser.hdfs.groups": "*",
+          "hadoop.proxyuser.hive.hosts": "*",
+          "hadoop.proxyuser.hive.groups": "*",
+          "hadoop.proxyuser.ambari.hosts": "*",
+          "hadoop.proxyuser.ambari.groups": "*",
+          "proxyuser_group": "users"
+        }
+      }
+    },
+    {
+      "ams-hbase-env": {
+        "properties": {
+          "hbase_master_heapsize": "768"
+        }
+      }
+    }
+  ],
+  "Blueprints" : {
+    "blueprint_name": "fullCluster",
+    "stack_name" : "HDP",
+    "stack_version" : "2.4"
+  }
+}

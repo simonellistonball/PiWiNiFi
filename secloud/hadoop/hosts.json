@@ -1,27 +1,35 @@
 {
-    "blueprint": "fullCluster",
+    "blueprint": "piwinifi",
     "default_password": "admin",
     "host_groups": [
         {
             "hosts": [
                 {
-                    "fqdn": "%STACK%01.cloud.hortonworks.com"
+                    "fqdn": "piwinifigateway.local"
                 }
             ],
             "name": "gateway"
         },
         {
             "hosts": [
-                {
-                    "fqdn": "%STACK%02.cloud.hortonworks.com"
-                }
+                {"fqdn": "piwinifinifi1.local"},
+                {"fqdn": "piwinifinifi2.local"},
+                {"fqdn": "piwinifinifi3.local"}
             ],
             "name": "nifi"
         },
         {
             "hosts": [
+                {"fqdn": "piwinifisolr1.local"},
+                {"fqdn": "piwinifisolr2.local"},
+                {"fqdn": "piwinifisolr3.local"}
+            ],
+            "name": "solr"
+        },
+        {
+            "hosts": [
                 {
-                    "fqdn": "%STACK%03.cloud.hortonworks.com"
+                    "fqdn": "piwinifimaster1.local"
                 }
             ],
             "name": "master_1"
@@ -29,7 +37,7 @@
         {
             "hosts": [
                 {
-                    "fqdn": "%STACK%04.cloud.hortonworks.com"
+                    "fqdn": "piwinifimaster2.local"
                 }
             ],
             "name": "master_2"
@@ -37,10 +45,18 @@
         {
             "hosts": [
                 {
-                    "fqdn": "%STACK%05.cloud.hortonworks.com",
-                    "fqdn": "%STACK%06.cloud.hortonworks.com",
-                    "fqdn": "%STACK%07.cloud.hortonworks.com"
+                    "fqdn": "piwinifimaster3.local"
                 }
+            ],
+            "name": "master_3"
+        },
+        {
+            "hosts": [
+                {"fqdn": "piwinifislave1.local" },
+                {"fqdn": "piwinifislave2.local"},
+                {"fqdn": "piwinifislave3.local"},
+                {"fqdn": "piwinifislave4.local"},
+                {"fqdn": "piwinifislave5.local"}
             ],
             "name": "slaves"
         }

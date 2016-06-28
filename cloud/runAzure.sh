@@ -26,6 +26,7 @@ docker-machine scp -r nifi/custom piwinificloud:data/cloud/
 
 docker-machine scp -r provisioner/certs piwinificloud:data/provisioner/
 docker-machine scp -r provisioner/data piwinificloud:data/provisioner/
+docker-machine scp -r provisioner/overlay piwinificloud:data/provisioner/
 
 docker-machine ssh piwinificloud "mkdir -p data/cloud/repos/flowfile_repository data/cloud/repos/content_repository data/cloud/repos/database_repository"
 # run the nifi container
@@ -38,6 +39,7 @@ fi
 cd ../provisioner
 if [ ! $(docker ps | grep --silent simonellistonball/provisioner) ]
 then
+  ./build.sh
   ./runProvisioning.sh /home/docker-user/data/provisioner
 fi
 

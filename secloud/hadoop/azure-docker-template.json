@@ -1,0 +1,220 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01-preview/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminPassword": {
+      "metadata": {
+        "description": "Admin password on all VMs."
+      },
+      "type": "securestring"
+    },
+    "adminUsername": {
+      "metadata": {
+        "description": "Admin username on all VMs."
+      },
+      "type": "string"
+    },
+    "prefix": {
+      "metadata": {
+        "description": "Unique prefix used for all resource naming"
+      },
+      "type": "string"
+    },
+    "resourceLocation": {
+      "allowedValues": [
+        "North Europe",
+        "West Europe"
+      ],
+      "metadata": {
+        "description": "Azure region where all resources will be deployed. This is distinct from resource group location."
+      },
+      "type": "string"
+    },
+    "sshKeyData": {
+      "metadata": {
+        "description": "SSH rsa public key file as a string."
+      },
+      "type": "string"
+    },
+  },
+  "variables": {
+    "apiVersion": "2015-06-15",
+    "gatewayName": "gateway",
+    "hadoopSubnetName": "hadoopSubnet",
+    "hadoopSubnetPrefix": "10.0.0.0/24",
+    "subnetIPPrefix": "10.0.0.",
+    "prefix": "[parameters('prefix')]",
+    "publicName": "piwinifi",
+    "storageAccountType": "Standard_LRS"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "gatewaySecurityGroup",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "sshRule",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow SSH",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "22",
+              "direction": "Inbound",
+              "priority": 1000,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "nifiSecurityGroup",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "nifiRules",
+            "properties": {
+              "access": "Allow",
+              "description": "Allow NiFi",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "8443-8444",
+              "direction": "Inbound",
+              "priority": 1001,
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkSecurityGroups"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('prefix'), variables('machines')[0].name, 'nicPublic')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "[concat(variables('prefix'),variables('machines')[0].name, 'ipPublic')]",
+            "properties": {
+              "PrivateIpAddress": "[concat(variables('subnetIPPrefix'),variables('machines')[0].ip)]",
+              "PrivateIpAllocationMethod": "Static",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nifiSecurityGroup')]"
+              },
+              "primary": true,
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicName'))]"
+              },
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', 'hadoopVnet'),'/subnets/', variables('hadoopSubnetName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "copy": {
+        "count": "[parameters('nifiCount')]",
+        "name": "networkLoop"
+      },
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('prefix'), variables('machines')[copyIndex(1)].name, 'nicPublic')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "[concat(variables('prefix'),variables('machines')[copyIndex(1)].name, 'ipPublic')]",
+            "properties": {
+              "PrivateIpAddress": "[concat(variables('subnetIPPrefix'),variables('machines')[copyIndex(1)].ip)]",
+              "PrivateIpAllocationMethod": "Static",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'nifiSecurityGroup')]"
+              },
+              "primary": true,
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat('piwinifi', copyIndex(1)))]"
+              },
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', 'hadoopVnet'),'/subnets/', variables('hadoopSubnetName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "copy": {
+        "count": "[sub(variables('machineCount'),4)]",
+        "name": "networkLoop"
+      },
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('prefix'),variables('machines')[copyIndex(4)].name, 'nic1')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "[concat(variables('prefix'),variables('machines')[copyIndex(3)].name, 'ipInt')]",
+            "properties": {
+              "privateIPAddress": "[concat(variables('subnetIPPrefix'),variables('machines')[copyIndex(4)].ip)]",
+              "privateIPAllocationMethod": "Static",
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', 'hadoopVnet'),'/subnets/', variables('hadoopSubnetName'))]"
+              }
+            }
+          }
+        ]
+      },
+      "type": "Microsoft.Network/networkInterfaces"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "[concat(variables('prefix'), 'sa')]",
+      "properties": {
+        "accountType": "[variables('storageAccountType')]"
+      },
+      "type": "Microsoft.Storage/storageAccounts"
+    },
+
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "nifis",
+      "type": "Microsoft.Compute/availabilitySets"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "slaves",
+      "type": "Microsoft.Compute/availabilitySets"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "masters",
+      "type": "Microsoft.Compute/availabilitySets"
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "name": "solrs",
+      "type": "Microsoft.Compute/availabilitySets"
+    }
+  ]
+}
