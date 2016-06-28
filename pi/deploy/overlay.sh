@@ -4,10 +4,9 @@ log "PiWiNiFi overlay script invoked at $(date)"
 
 log "Deploying overlay into paths"
 cp -rf /tmp/overlayunpack/nifi/conf/* /opt/nifi/conf/
-cp -rf /tmp/overlayunpack/opt/nifi/conf/* /opt/nifi/conf/
-cp -rf /tmp/overlayunpack/opt/nifi/custom /opt/nifi/
+cp -rf /tmp/overlayunpack/nifi/custom/* /opt/nifi/custom/
 
-unzip -joq /tmp/overlayunpack/jce_policy-8.zip -d ${JAVA_HOME}/jre/lib/security/
+unzip -joq /tmp/overlayunpack/jce/jce_policy-8.zip -d ${JAVA_HOME}/jre/lib/security/
 mkdir -p /opt/pi && cp -R /tmp/overlayunpack/pi/* /opt/pi
 mkdir -p /opt/manuf && cp /tmp/overlayunpack/manuf/* /opt/manuf
 
@@ -15,7 +14,7 @@ log "Setting executables"
 chmod +x /opt/pi/deploy/launcher.sh
 chmod +x /opt/pi/deploy/bootstrap.sh
 chmod +x /opt/pi/deploy/overlay.sh
-chmod +x /opt/pi/dnsUpdater/updatedns.sh
+chmod +x /opt/pi/dnsUpdater/update.sh
 
 ln -s /opt/pi/dnsUpdater/update.sh /etc/network/if-up.d/updatedns
 
