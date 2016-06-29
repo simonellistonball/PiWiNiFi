@@ -33,8 +33,8 @@
           "to": "NOW/MINUTE%2B1MINUTE",
           "field": "ts_lastlog",
           "type": "time",
-          "fromDateObj": "2016-04-04T13:11:08.877Z",
-          "toDateObj": "2016-04-04T13:26:08.877Z",
+          "fromDateObj": "2016-06-29T17:14:52.667Z",
+          "toDateObj": "2016-06-29T17:29:52.667Z",
           "mandate": "must",
           "active": true,
           "alias": "",
@@ -319,11 +319,11 @@
             "ids": [
               0
             ],
-            "query": "q=*&wt=json&rows=0&fq=ts_lastlog:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&facet=true&facet.field=type&facet.limit=10&facet.missing=true",
+            "query": "q=*&wt=json&rows=0&fq=ts_lastlog:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&facet=true&facet.field=service&facet.limit=10&facet.missing=true",
             "custom": ""
           },
           "mode": "count",
-          "field": "type",
+          "field": "service",
           "stats_field": "",
           "decimal_points": 0,
           "exclude": [],
@@ -423,7 +423,7 @@
               0
             ],
             "query": "q=*&wt=json&rows=0&fq=ts_lastlog:[NOW/MINUTE-15MINUTE%20TO%20NOW/MINUTE%2B1MINUTE]&fq=-manufacturer:NotRecognised&facet=true&facet.field=manufacturer&facet.limit=30&facet.missing=true",
-            "custom": ""
+            "custom": "&fq=service:CLIENT"
           },
           "mode": "count",
           "field": "manufacturer",
@@ -507,7 +507,7 @@
             "#F9D9F9",
             "#DEDAF7"
           ],
-          "title": "Top makers"
+          "title": "Top Client Manufacturers"
         }
       ]
     },
@@ -555,7 +555,8 @@
             "ts_lastlog",
             "ts_lastseen",
             "session",
-            "ssid"
+            "ssid",
+            "service"
           ],
           "important_fields": [
             "Session",
@@ -630,8 +631,10 @@
     "core_name": "devices_shard1_replica1",
     "core_list": [
       "devices_shard1_replica1",
-      "logs_shard1_replica1",
-      "tweets_shard1_replica1"
+      "statuses_shard1_replica2",
+      "statuses_shard2_replica2",
+      "users_shard1_replica3",
+      "users_shard2_replica3"
     ],
     "global_params": ""
   }
