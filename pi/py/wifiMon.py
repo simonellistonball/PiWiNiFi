@@ -17,7 +17,7 @@ from netaddr import *
 from os import system as run_command
 from json import dumps
 from time import time, sleep
-from socket import getfqdn
+from socket import gethostname
 # Nifi ListenSyslog requires RFC5424 messages, which python doesn't do well natively
 from syslog_rfc5424_formatter import RFC5424Formatter
 import manuf
@@ -35,7 +35,7 @@ __status__ = "DodgyHack"
 channel_hopper_scan_rate = 3
 channel_hopper_scan_list = random.randrange(1, 15)
 log_level = logging.INFO
-myname = getfqdn()
+myname = gethostname()
 
 # Configure Logging
 log = logging.getLogger('wifiMon')
